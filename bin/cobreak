@@ -1,0 +1,11 @@
+#!/bin/env ruby
+require 'ostruct'
+require 'optparse'
+require 'cobreak/run'
+options = OpenStruct.new
+begin
+  CoBreakOPT::Runner.runner(options)
+rescue OptionParser::InvalidOption, OptionParser::InvalidArgument => error
+  puts error.message
+  exit(1)
+end
