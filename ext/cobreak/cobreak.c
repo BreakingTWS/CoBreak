@@ -10,9 +10,7 @@ void Init_cobreak(){
 
 
 
-	init_cobreak_ascii85();
-	init_cobreak_binary();
-	init_cobreak_cesar();
+
 	init_cobreak_openssl();
 	init_cobreak_gcrypt();
 	init_cobreak_cipher();

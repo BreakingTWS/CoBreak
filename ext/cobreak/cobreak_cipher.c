@@ -4,6 +4,8 @@ VALUE mCoBreakCipher;
 VALUE cCoBreakBase16;
 VALUE cCoBreakBase32;
 VALUE cCoBreakBase64;
+VALUE cCoBreakCesar;
+VALUE cCoBreakBinary;
 
 char b32[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 char b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -211,6 +213,93 @@ VALUE b64_encode(VALUE self, VALUE full){
 	return rb_str_new2(b64dst);
 }
 
+//Define Cesar
+void encodeblock_cesar(const char *input, char *output, int shift){
+    for (size_t i = 0; i < strlen(input); i++) {
+        char c = input[i];
+
+        if (c >= 'A' && c <= 'Z') {
+            output[i] = (c - 'A' + shift) % 26 + 'A';
+        } else if (c >= 'a' && c <= 'z') {
+            output[i] = (c - 'a' + shift) % 26 + 'a';
+        } else {
+            output[i] = c;
+        }
+    }
+    output[strlen(input)] = '\0';
+}
+
+
+void decodeblock_cesar(const char *input, char *output, int shift){
+    
+    encodeblock_cesar(input, output, 26 - (shift % 26));
+}
+
+VALUE cesar_encode(VALUE self, VALUE str, VALUE shift) {
+    char *input = RSTRING_PTR(str);
+    char output[1024];  // Buffer para la salida
+    int shift_value = NUM2INT(shift);
+
+   
+    encodeblock_cesar(input, output, shift_value);
+    return rb_str_new2(output);
+}
+
+
+VALUE cesar_decode(VALUE self, VALUE str, VALUE shift) {
+    char *input = RSTRING_PTR(str);
+    char output[1024];  // Buffer para la salida
+    int shift_value = NUM2INT(shift);
+
+   
+    decodeblock_cesar(input, output, shift_value);
+    return rb_str_new2(output);
+}
+
+//Define Binary
+void encodeblock_binary(const char bl[], char *blstr, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        for (int j = 7; j >= 0; j--) {
+            blstr[i * 8 + (7 - j)] = ((bl[i] >> j) & 1) ? '1' : '0';
+        }
+    }
+    blstr[length * 8] = '\0';  
+}
+
+void decodeblock_binary(const char bl[], char *blstr, size_t length) {
+    for (size_t i = 0; i < length / 8; i++) {
+        char byte = 0;
+        for (int j = 0; j < 8; j++) {
+            byte = (byte << 1) | (bl[i * 8 + j] - '0');
+        }
+        blstr[i] = byte;
+    }
+    blstr[length / 8] = '\0'; 
+}
+
+VALUE binary_encode(VALUE self, VALUE full) {
+    char *strb = RSTRING_PTR(full);
+    char mybinary[1024 * 8 + 1]; 
+    size_t length = strlen(strb);
+
+    encodeblock_binary(strb, mybinary, length);
+    return rb_str_new2(mybinary);
+}
+
+
+VALUE binary_decode(VALUE self, VALUE full) {
+    char *mybinary = RSTRING_PTR(full);
+    char strb[1024];
+    size_t length = strlen(mybinary);
+
+    if (length % 8 != 0) {
+        rb_raise(rb_eArgError, "Binary string must have a length that is a multiple of 8");
+    }
+
+    decodeblock_binary(mybinary, strb, length);
+    return rb_str_new2(strb);
+}
+
 void init_cobreak_cipher() {
     //Define module Cipher in mCoBreak
     mCoBreakCipher = rb_define_module_under(mCoBreak, "Cipher");
@@ -235,4 +324,18 @@ void init_cobreak_cipher() {
     //Define method for class Base64
     rb_define_singleton_method(cCoBreakBase64, "encode", b64_encode, 1);
     rb_define_singleton_method(cCoBreakBase64, "decode", b64_decode, 1);
+
+    //Define class Cesar in module mCoBreakCipher
+    cCoBreakCesar = rb_define_class_under(mCoBreakCipher, "Cesar", rb_cObject);
+
+    //Define method for class Cesar
+    rb_define_singleton_method(cCoBreakCesar, "encode", cesar_encode, 2);
+    rb_define_singleton_method(cCoBreakCesar, "decode", cesar_decode, 2);
+
+    //Define class Cesar in module mCoBreakCipher
+    cCoBreakBinary = rb_define_class_under(mCoBreakCipher, "Binary", rb_cObject);
+
+    //Define method for class Binary
+    rb_define_singleton_method(cCoBreakBinary, "encode", binary_encode, 1);
+    rb_define_singleton_method(cCoBreakBinary, "decode", binary_decode, 1);
 }

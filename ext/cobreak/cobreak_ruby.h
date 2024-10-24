@@ -14,9 +14,8 @@ extern VALUE mCoBreak;
 #endif
 
 
-#include<cobreak_ascii85.h>
-#include<cobreak_binary.h>
-#include<cobreak_cesar.h>
+
+
 #include<cobreak_openssl.h>
 #include<cobreak_gcrypt.h>
 #include<cobreak_nettle.h>
