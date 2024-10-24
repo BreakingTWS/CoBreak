@@ -9,7 +9,7 @@ void Init_cobreak(){
 
 
 
-	init_cobreak_base64();
+
 	init_cobreak_ascii85();
 	init_cobreak_binary();
 	init_cobreak_cesar();

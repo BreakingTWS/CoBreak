@@ -13,7 +13,7 @@ extern VALUE mCoBreak;
 	VALUE mCoBreak = rb_define_module("CoBreak");
 #endif
 
-#include<cobreak_base64.h>
+
 #include<cobreak_ascii85.h>
 #include<cobreak_binary.h>
 #include<cobreak_cesar.h>
