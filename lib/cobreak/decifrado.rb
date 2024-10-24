@@ -7,9 +7,9 @@ module CoBreak
       decipher.mode = mode
       decipher.dato = dato
       if (decipher.mode.eql?('base16'))
-        decipher.result = CoBreak::Base16.decode(decipher.dato)
+        decipher.result = CoBreak::Cipher::Base16.decode(decipher.dato)
       elsif (decipher.mode.eql?('base32'))
-        decipher.result = CoBreak::Base32.decode(decipher.dato)
+        decipher.result = CoBreak::Cipher::Base32.decode(decipher.dato)
       elsif (decipher.mode.eql?('base64'))
         decipher.result = CoBreak::Base64.decode(decipher.dato)
       elsif (decipher.mode.eql?('ascii85'))
