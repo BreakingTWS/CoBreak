@@ -11,7 +11,7 @@ module CoBreak
       elsif (cipher.mode.eql?('base32'))
         cipher.result = CoBreak::Cipher::Base32.encode(dato)
       elsif (cipher.mode.eql?('base64'))
-        cipher.result = CoBreak::Base64.encode(dato)
+        cipher.result = CoBreak::Cipher::Base64.encode(dato)
       elsif (cipher.mode.eql?('ascii85'))
         cipher.result = CoBreak::Ascii85.encode(dato)
       elsif (cipher.mode.eql?('cesar'))
