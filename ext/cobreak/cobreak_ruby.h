@@ -15,7 +15,6 @@ extern VALUE mCoBreak;
 
 #include<cobreak_base64.h>
 #include<cobreak_base32.h>
-#include<cobreak_base16.h>
 #include<cobreak_ascii85.h>
 #include<cobreak_binary.h>
 #include<cobreak_cesar.h>

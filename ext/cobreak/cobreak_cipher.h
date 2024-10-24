@@ -1,5 +1,5 @@
-#ifndef COBREAK_GCRYPT_RUBY
-#define COBREAK_GCRYPT_RUBY
+#ifndef COBREAK_CIPHER_RUBY
+#define COBREAK_CIPHER_RUBY
 
 //include library <cobreak_ruby.h> for project
 #include<cobreak_ruby.h>
