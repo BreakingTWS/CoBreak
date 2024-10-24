@@ -13,11 +13,11 @@ module CoBreak
       elsif (cipher.mode.eql?('base64'))
         cipher.result = CoBreak::Cipher::Base64.encode(dato)
       elsif (cipher.mode.eql?('ascii85'))
-        cipher.result = CoBreak::Ascii85.encode(dato)
+        cipher.result = Ascii85.encode(dato)
       elsif (cipher.mode.eql?('cesar'))
-        cipher.result = CoBreak::Cesar.encode(dato, ARGV[0].to_i)
+        cipher.result = CoBreak::Cipher::Cesar.encode(dato, ARGV[0].to_i)
       elsif (cipher.mode.eql?('binary'))
-        cipher.result = CoBreak::Binary.encode(dato)
+        cipher.result = CoBreak::Cipher::Binary.encode(dato)
       end
       unless (cipher.result.nil?) or (cipher.result.eql?(cipher.dato))
         puts "\n\e[1;32m[\e[37m+\e[1;32m]\e[37m Ciphertext: #{cipher.result}"
