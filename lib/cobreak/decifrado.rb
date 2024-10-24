@@ -21,9 +21,7 @@ module CoBreak
       end
       unless (decipher.result.nil?) or (decipher.result.eql?(decipher.dato))
         puts "\n\e[1;32m[\e[37m+\e[1;32m]\e[37m DecipherText: #{decipher.result}"
-        if (decipher.mode.eql?('cesar'))
-          puts "\e[1;32m[\e[37m+\e[1;32m]\e[37m Number Rotations: #{ARGV[0]}"
-        end
+        puts "\e[1;32m[\e[37m+\e[1;32m]\e[37m Number Rotations: #{ARGV[0]}" if (decipher.mode.eql?('cesar'))
       else
         puts "\e[1;31m[\e[37m+\e[1;31m]\e[37m Not Cipher Text..."
       end
