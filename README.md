@@ -1,14 +1,14 @@
 # CoBreak
 
-[`CoBreak.com`](https://github.com/BreakerBox/CoBreak.git)
+[`CoBreak.com`](https://github.com/BreakingTWS/CoBreak.git)
 
-This script was made by [`Breaker`](https://github.com/BreakerBox/CoBreak.git)
+This script was made by [`Breaker`](https://github.com/BreakingTWS/CoBreak.git)
 
 The CoBreak script is an cipher and cryptography tool made with the purpose of facilitating the encryption of data or others, it includes parameters to brute force the hashes through dictionaries
 
 # GitHub Stats
 
-![BreakerBox GitHub Stats](https://github-readme-stats.vercel.app/api?username=BreakerBox&show_icons=true&theme=midnight-purple)
+![BreakerBox GitHub Stats](https://github-readme-stats.vercel.app/api?username=BreakingTWS&show_icons=true&theme=midnight-purple)
 
 # Installation
 
@@ -21,30 +21,44 @@ The CoBreak script is an cipher and cryptography tool made with the purpose of f
  - Cesar
  - Binaries
 
-### hashes
+### Raw-Hash
 
  - MD4
  - MD5
+ - Half-MD5
  - SHA-1
- - SHA-224
- - SHA-256
- - SHA-384
- - SHA-512
- - RIPEMD-160
+ - Double-SHA1
+ - SHA2-224
+ - SHA2-256
+ - SHA2-384
+ - SHA2-512
+ - SHA3-224
+ - SHA3-256
+ - SHA3-384
+ - SHA3-512
+ - Ripemd-160
+ - Tiger-160
+ - Blake2s-128
+ - Blake2s-160
+ - Blake2s-256
+ - Blake2b-160
+ - Blake2b-256
+ - Blake2b-384
+ - Blake2b-512
+ - GOST R 34.11-2012 (Streebog) 256-bit, big-endian
+ - GOST R 34.11-2012 (Streebog) 512-bit, big-endian
+
 # Setup
 ---
-###add to Gemfile:
+##Execute in your terminal for build ruby gem and installation:
 
-> $ **gem 'cobreak'**
+###Build ruby gem:
 
-###and then execute:
+> $ **gem build cobreak.gemspec**
 
-> $ **bundle**
+###And after install ruby gem:
 
-###Or install it yourself as:
-
-> $ **bundle install**
-
+> $ **sudo gem install ./cobreak-1.0.5.gem**
 
 ---
 # Version
