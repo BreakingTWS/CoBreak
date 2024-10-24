@@ -1,0 +1,95 @@
+#!/bin/env ruby
+require 'ostruct'
+require 'fileutils'
+require 'cobreak/version'
+options = OpenStruct.new
+ARGV.each {|opt|
+    path_hash = File.join(Gem.path[1], "gems","cobreak-#{CoBreak.version}" , "lib", "cobreak", "hash", "hash.db")
+    path_chr = File.join(Gem.path[1], "gems","cobreak-#{CoBreak.version}" , "lib", "cobreak", "show")
+    path_bool = File.join(Gem.path[1], "gems","cobreak-#{CoBreak.version}" , "lib", "cobreak", "config", "database.db")
+    #dat = ['md4', 'md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512', 'ripemd160']
+    dat = %w[MD4 MD5 HALF-MD5 SHA1 SHA2-224 SHA2-256 SHA2-384 SHA2-512 SHA3-224 SHA3-256 SHA3-384 SHA3-512 RIPEMD-160 TIGER-160 DOUBLE-SHA1 BLAKE2S-128 BLAKE2S-160 BLAKE2B-160 BLAKE2S-224 BLAKE2S-256 BLAKE2B-256 BLAKE2B-384 BLAKE2B-512 WHIRLPOOL GOST-STREEBOG-256 GOST-STREEBOG-512 SHAKE-128]
+    case opt
+        when 'start'
+        	begin
+            	File.open(path_bool, mode: 'w'){|line|
+            	    line.write 'true'
+            	}
+            	puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m The Database was activated"
+            rescue Errno::EACCES
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m Access Denied"
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m root privileges needed"
+            end
+        when 'stop'
+            begin
+            	File.open(path_bool, mode: 'w'){|line|
+                	line.puts false
+            	}
+            	puts "\e[1;33m[i]\e[37m Database already stopped"
+            rescue Errno::EACCES
+            	puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m Access Denied"
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m root privileges needed"
+            end
+        when 'reinit'
+            begin
+                File.foreach(path_bool){|line|
+                    line.chomp!
+                    if (line == 'false')
+                        abort "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Database Not Started"
+                    end
+                }
+                File.open(path_hash, mode: 'w'){|line|
+                    line.puts nil
+                }
+                for dbreinit in dat
+                    File.open(path_chr + "/#{dbreinit}.db", mode: 'w'){|line|
+                        line.puts nil
+                    }
+                end
+                puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Reinitializing The Database"
+            rescue Errno::EACCES
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m Access Denied"
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m root privileges needed"
+            end
+        when 'delete'
+            begin
+                for dbdelete in dat
+                    FileUtils.rm(path_chr + "/#{dbdelete}.db")
+                end
+                FileUtils.rm(path_hash)
+                File.open(path_bool, mode: 'w'){|line|
+                    line.puts false
+                }
+                puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Database Deleted Successfully"
+            rescue Errno::ENOENT
+                puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Database Deleted Successfully"
+            rescue Errno::EACCES
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m Access Denied"
+                puts "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m root privileges needed"
+            end
+        when 'status'
+            puts "\e[37mCoBreak Database Status"
+            File.foreach(path_bool){|line|
+                line.chomp!
+                if (line.eql?('true'))
+                    puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m The Database Is Activated"
+                    exit
+                end
+            }
+            if true
+                puts "\e[1;33m[i]\e[1;37m The Database Is Deactivated"
+            end
+        when 'help'
+            puts "Manage the CoBreak database"
+            puts
+            puts "Examples: cbrdb start"
+            puts
+            puts "cbrdb start                           # start the database"
+            puts "cbrdb stop                            # stop the database"
+            puts "cbrdb reinit                          # delete and reinitialize the database"
+            puts "cbrdb delete                          # delete database and stop using it"
+            puts "cbrdb status                          # check database status"
+        else
+            puts "parameter not found, run cbrdb help"
+    end
+}

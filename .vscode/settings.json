@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "cobreak_base32.h": "c",
+        "cobreak_ruby.h": "c",
+        "cobreak_openssl.h": "c",
+        "md4.h": "c",
+        "cobreak_ascii85.h": "c",
+        "cobreak_binary.h": "c"
+    }
+}
