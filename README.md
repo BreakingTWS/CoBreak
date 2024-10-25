@@ -4,7 +4,7 @@
 
 This script was made by [`Breaker`](https://github.com/BreakingTWS/CoBreak.git)
 
-The CoBreak script is an cipher and cryptography tool made with the purpose of facilitating the encryption of data or others, it includes parameters to brute force the hashes through dictionaries
+CoBreak is a password security audit and recovery tool available for many operating systems. CoBreak supports various types of encryption and hashing for the purpose of facilitating data encryption or other
 
 # GitHub Stats
 
