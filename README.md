@@ -58,7 +58,7 @@ CoBreak is a password security audit and recovery tool available for many operat
 
 <h3>And after install ruby gem:</h3>
 
-> $ **sudo gem install ./cobreak-1.0.5.gem**
+> $ **sudo gem install ./cobreak-1.0.4.gem**
 
 ---
 # Version
