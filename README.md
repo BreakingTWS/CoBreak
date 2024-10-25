@@ -4,7 +4,7 @@
 
 This script was made by [`Breaker`](https://github.com/BreakingTWS/CoBreak.git)
 
-CoBreak is a password security audit and recovery tool available for many operating systems. CoBreak supports various types of encryption and hashing for the purpose of facilitating data encryption or other
+CoBreak is a password security audit and recovery tool available for many operating systems. CoBreak supports various types of cipher and hashing for the purpose of facilitating data encryption or other
 
 # GitHub Stats
 
