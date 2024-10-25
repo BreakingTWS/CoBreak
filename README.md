@@ -52,11 +52,11 @@ The CoBreak script is an cipher and cryptography tool made with the purpose of f
 ---
 <h2>Execute in your terminal for build ruby gem and installation:</h2>
 
-<h2>Build ruby gem:</h2>
+<h3>Build ruby gem:</h3>
 
 > $ **gem build cobreak.gemspec**
 
-###And after install ruby gem:
+<h3>And after install ruby gem:</h3>
 
 > $ **sudo gem install ./cobreak-1.0.5.gem**
 
