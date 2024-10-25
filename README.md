@@ -10,9 +10,9 @@ The CoBreak script is an cipher and cryptography tool made with the purpose of f
 
 ![BreakerBox GitHub Stats](https://github-readme-stats.vercel.app/api?username=BreakingTWS&show_icons=true&theme=midnight-purple)
 
-# Installation
+<h1> Installation</h2>
 
-### Cipher
+<h3> Cipher</h3>
 
  - Base64
  - Base32
@@ -21,7 +21,7 @@ The CoBreak script is an cipher and cryptography tool made with the purpose of f
  - Cesar
  - Binaries
 
-### Raw-Hash
+<h3> Raw-Hash</h3>
 
  - MD4
  - MD5
@@ -48,11 +48,11 @@ The CoBreak script is an cipher and cryptography tool made with the purpose of f
  - GOST R 34.11-2012 (Streebog) 256-bit, big-endian
  - GOST R 34.11-2012 (Streebog) 512-bit, big-endian
 
-# Setup
+<h1> Setup</h3>
 ---
-##Execute in your terminal for build ruby gem and installation:
+<h2>Execute in your terminal for build ruby gem and installation:</h2>
 
-###Build ruby gem:
+<h2>Build ruby gem:</h2>
 
 > $ **gem build cobreak.gemspec**
 
