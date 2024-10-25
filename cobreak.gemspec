@@ -1,6 +1,6 @@
 Gem::Specification.new do |info|
   info.name        = 'cobreak'
-  info.version     = '1.0.5'
+  info.version     = '1.0.4'
   info.executables << "cobreak" 
   info.executables << "cbrdb"
   info.description = "The CoBreak script is an cipher and cryptography tool"
