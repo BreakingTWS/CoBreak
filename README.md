@@ -64,11 +64,7 @@ CoBreak is a password security audit and recovery tool available for many operat
 # Version
 ## CoBreak
 
-![CoBreak](https://img.shields.io/badge/CoBreak-%F0%9D%96%9B0.1-blueviolet)
-
-## Ruby
-
-![Ruby 3.0.0](https://img.shields.io/badge/Ruby-3.0.0-blue)
+![CoBreak](https://img.shields.io/badge/CoBreak-1.0.4-blueviolet)
 
 # License
 
