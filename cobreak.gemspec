@@ -1,6 +1,6 @@
 Gem::Specification.new do |info|
   info.name        = 'cobreak'
-  info.version     = '1.0.4'
+  info.version     = '1.0.5'
   info.executables << "cobreak" 
   info.executables << "cbrdb"
   info.description = "The CoBreak script is an cipher and cryptography tool"
@@ -13,7 +13,7 @@ Gem::Specification.new do |info|
   info.add_runtime_dependency "Ascii85", '~> 1.0', '>= 1.0.0'
 #  info.add_runtime_dependency "ruby_figlet", "=> 0"
   info.authors     = ["BreakerTW"]
-  info.email       = 'breaker@gmail.com'
+  info.email       = 'breakingtws@gmail.com'
   info.summary     = "Force Brute, Cipher, Cryptography"
 
   info.extensions = %w[ext/cobreak/extconf.rb]
@@ -22,7 +22,7 @@ Gem::Specification.new do |info|
     f.match(/^.gitignore/)
   end
 
-  info.homepage    = 'https://github.com/BreakerBox/CoBreak'
+  info.homepage    = 'https://github.com/BreakingTWS/CoBreak'
   info.license       = 'MIT'
   info.post_install_message = "thanks for installing my gem"
 end

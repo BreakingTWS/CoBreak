@@ -14,4 +14,5 @@ void Init_cobreak(){
 	init_cobreak_openssl();
 	init_cobreak_gcrypt();
 	init_cobreak_cipher();
+	init_cobreak_attack_wordlist();
 }

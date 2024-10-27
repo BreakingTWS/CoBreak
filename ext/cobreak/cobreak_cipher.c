@@ -15,13 +15,12 @@ void decodeblock16(const char bl[], char *blstr, size_t length) {
     for (size_t i = 0; i < length / 2; i++) {
         int byte = 0;
         if (sscanf(bl + (i * 2), "%2x", &byte) != 1) {
-            // Manejar error: entrada hex inválida
             rb_raise(rb_eArgError, "Invalid hex input");
-            return; // Esto no se alcanzará, pero es una buena práctica
+            return; 
         }
         blstr[i] = (unsigned char)byte;
     }
-    blstr[length / 2] = '\0';  // Terminar correctamente la cadena
+    blstr[length / 2] = '\0';
 }
 
 VALUE b16_decode(VALUE self, VALUE full) {
@@ -29,12 +28,10 @@ VALUE b16_decode(VALUE self, VALUE full) {
     char strb16[1024];
     size_t length = strlen(myb16);
 
-    // Validar longitud
     if (length % 2 != 0) {
         rb_raise(rb_eArgError, "Hex string must have an even length");
     }
 
-    // Decodificación
     decodeblock16(myb16, strb16, length);
     return rb_str_new2(strb16);
 }
@@ -42,18 +39,17 @@ VALUE b16_decode(VALUE self, VALUE full) {
 void encodeblock16(const char bl[], size_t length, char b16str[]) {
     const char *hexDigits = "0123456789ABCDEF";
     for (size_t i = 0; i < length; i++) {
-        b16str[i * 2] = hexDigits[(bl[i] >> 4) & 0x0F];    // Primer dígito
-        b16str[i * 2 + 1] = hexDigits[bl[i] & 0x0F];       // Segundo dígito
+        b16str[i * 2] = hexDigits[(bl[i] >> 4) & 0x0F];
+        b16str[i * 2 + 1] = hexDigits[bl[i] & 0x0F];      
     }
-    b16str[length * 2] = '\0';  // Agregar el terminador de cadena
+    b16str[length * 2] = '\0';
 }
 
 VALUE b16_encode(VALUE self, VALUE full) {
     char *strb16 = RSTRING_PTR(full);
-    char myb16[1024 * 2 + 1];  // Buffer para la codificación
+    char myb16[1024 * 2 + 1]; 
     size_t length = strlen(strb16);
 
-    // Codificación
     encodeblock16(strb16, length, myb16);
     return rb_str_new2(myb16);
 }
@@ -66,12 +62,12 @@ int decodeblock32(const char bl[], char *blstr){
 
     for (size_t i = 0; i < strlen(bl); i++) {
         if (bl[i] == '=') {
-            break; // Fin del mensaje
+            break; 
         }
 
         int value = strchr(b32, bl[i]) - b32;
         if (value < 0 || value >= 32) {
-            break; // Carácter inválido
+            break;
         }
 
         buffer = (buffer << 5) | value;
@@ -90,9 +86,9 @@ VALUE b32_decode(VALUE self, VALUE full) {
     char strb32[1024] = "";
     char *clrdst = strb32;
 
-    // Decodificar
+    
     int decoded_length = decodeblock32(myb32, clrdst);
-    clrdst[decoded_length] = '\0'; // Asegurar que la cadena esté terminada
+    clrdst[decoded_length] = '\0'; 
 
     return rb_str_new2(strb32);
 }
@@ -117,7 +113,6 @@ void encodeblock32(const char bl[], int len, char b32str[]){
         b32str[output_length++] = b32[(buffer << (5 - bits_left)) & 0x1F];
     }
 
-    // Añadir padding
     while (output_length % 8 != 0) {
         b32str[output_length++] = '=';
     }
@@ -147,7 +142,6 @@ void decodeblock64(unsigned char in[], char *clrstr) {
 }
 
 VALUE b64_decode(VALUE self, VALUE full){
-//	check_Type(full, T_STRING);
 	int c, phase, i;
 	unsigned char in[4];
 	char *p;
@@ -188,11 +182,9 @@ void encodeblock64(unsigned char bl[], char b64str[], int len){
 }
 
 VALUE b64_encode(VALUE self, VALUE full){
-//	check_Type(full, T_STRING);
 	unsigned char in[3];
 	int i, len = 0;
 	int j = 0;
-	//char b64dst[1024];
 	char *strb64 = RSTRING_PTR(full);
 	char myb64[1024] = "";
 	char *b64dst = myb64;
