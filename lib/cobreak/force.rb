@@ -77,7 +77,8 @@ class Forze_brute
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::SHA2_256.crack(hash_input, wordlist)
     elsif (type_hash.downcase.eql?('sha384'))
-      @crypt = OpenSSL::Digest::SHA384.new
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::SHA2_384.crack(hash_input, wordlist)
     elsif (type_hash.downcase.eql?('sha512'))
       @crypt = OpenSSL::Digest::SHA512.new
     elsif (type_hash.downcase.eql?('ripemd160'))
