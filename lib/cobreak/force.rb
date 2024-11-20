@@ -85,6 +85,9 @@ class Forze_brute
     elsif (type_hash.downcase.eql?('sha3-224'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::SHA3_224.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('sha3-256'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::SHA3_256.crack(hash_input, wordlist)
     elsif (type_hash.downcase.eql?('ripemd160'))
       @crypt = OpenSSL::Digest::RIPEMD160.new
     end
