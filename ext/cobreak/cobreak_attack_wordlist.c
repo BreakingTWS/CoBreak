@@ -14,6 +14,7 @@ VALUE cCoBreakAttackWordlistSHA3_224;
 VALUE cCoBreakAttackWordlistSHA3_256;
 VALUE cCoBreakAttackWordlistSHA3_384;
 VALUE cCoBreakAttackWordlistSHA3_512;
+VALUE cCoBreakAttackWordlistRipemd_160;
 
 #define BLOCK_SIZE 1024
 #define MAX_HASH_LENGTH_MD 16
@@ -952,6 +953,78 @@ VALUE attackwordlist_sha3_512(VALUE self, VALUE hash, VALUE dictionary) {
     return found_password;
 }
 
+//Define Ripemd-160 Crack
+void calcular_ripemd_160(const char *cadena, unsigned char *hash) {
+    gcry_md_hd_t handle;
+    gcry_md_open(&handle, GCRY_MD_RIPEMD160, 0);
+    gcry_md_write(handle, cadena, strlen(cadena));
+    gcry_md_final(handle);
+    memcpy(hash, gcry_md_read(handle, GCRY_MD_RIPEMD160), 20);
+    gcry_md_close(handle);
+}
+
+int comparar_hashes_ripemd_160(const unsigned char *hash1, const unsigned char *hash2) {
+    return memcmp(hash1, hash2, 20) == 0;
+}
+
+void hex_a_hash_ripemd_160(const char *hex, unsigned char *hash) {
+    for (size_t i = 0; i < 20; i++) {
+        sscanf(hex + 2 * i, "%2hhx", &hash[i]);
+    }
+}
+
+VALUE attackwordlist_ripemd_160(VALUE self, VALUE hash, VALUE dictionary) {
+    FILE *archivo = fopen(StringValueCStr(dictionary), "r");
+    if (archivo == NULL) {
+        rb_raise(rb_eIOError, "Error al abrir el archivo de texto");
+    }
+
+    unsigned char hash_objetivo[20];
+    hex_a_hash_ripemd_160(StringValueCStr(hash), hash_objetivo);
+    
+    VALUE found_password = Qnil;
+    unsigned char hash_actual[20];
+    
+    char *lineas[BLOCK_SIZE];
+    for (size_t i = 0; i < BLOCK_SIZE; i++) {
+        lineas[i] = malloc(MAX_LINE_LENGTH * sizeof(char));
+        if (lineas[i] == NULL) {
+            fclose(archivo);
+            rb_raise(rb_eRuntimeError, "Error de asignación de memoria");
+        }
+    }
+
+    while (1) {
+        size_t count = 0;
+
+        for (size_t i = 0; i < BLOCK_SIZE && fgets(lineas[count], MAX_LINE_LENGTH, archivo); i++) {
+            lineas[count][strcspn(lineas[count], "\r\n")] = 0;
+            count++;
+        }
+
+        if (count == 0) {
+            break;
+        }
+
+        for (size_t i = 0; i < count; i++) {
+            calcular_ripemd_160(lineas[i], hash_actual);
+ 
+            if (comparar_hashes_ripemd_160(hash_actual, hash_objetivo)) {
+                if (found_password == Qnil) {
+                    found_password = rb_str_new_cstr(lineas[i]);
+                }
+            }
+        }
+    }
+
+    for (size_t i = 0; i < BLOCK_SIZE; i++) {
+        free(lineas[i]);
+    }
+    fclose(archivo);
+    
+    return found_password;
+}
+
 void init_cobreak_attack_wordlist() {
     //Define module AttackWordlist in mCoBreak
     VALUE mCoBreakAttackWordlist = rb_define_module_under(mCoBreak, "AttackWordlist");
@@ -1005,6 +1078,6 @@ void init_cobreak_attack_wordlist() {
     rb_define_singleton_method(cCoBreakAttackWordlistSHA3_384, "crack", attackwordlist_sha3_384, 2);
 
     //Define class SHA2-512 for AttackWordlist
-    cCoBreakAttackWordlistSHA3_512 = rb_define_class_under(mCoBreakAttackWordlist, "SHA3_512", rb_cObject);
-    rb_define_singleton_method(cCoBreakAttackWordlistSHA3_512, "crack", attackwordlist_sha3_512, 2);
+    cCoBreakAttackWordlistRipemd_160 = rb_define_class_under(mCoBreakAttackWordlist, "RIPEMD_160", rb_cObject);
+    rb_define_singleton_method(cCoBreakAttackWordlistRipemd_160, "crack", attackwordlist_ripemd_160, 2);
 }
