@@ -22,7 +22,7 @@ module CoBreak
         @options = $options
         @options.enc = "" if @options.enc.nil? == true
         @options.dec = "" if @options.dec.nil? == true
-        @options.cipher = %w[Base16 Base32 Base64 Ascii85 Binary Cesar]
+        @options.cipher = %w[Base16 Base32 Base64 Ascii85 Binary Cesar Vigenere]
         if (@options.cipher.include?(@options.enc.capitalize)) or (@options.cipher.include?(@options.dec.capitalize));
           if (File.exists?(@options.algo));
             IO.foreach(@options.algo){|line|
