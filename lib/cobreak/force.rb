@@ -76,7 +76,7 @@ class Forze_brute
     elsif (type_hash.downcase.eql?('sha2-256'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::SHA2_256.crack(hash_input, wordlist)
-    elsif (type_hash.downcase.eql?('sha384'))
+    elsif (type_hash.downcase.eql?('sha-384'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::SHA2_384.crack(hash_input, wordlist)
     elsif (type_hash.downcase.eql?('sha512'))
