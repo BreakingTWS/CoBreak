@@ -6,6 +6,7 @@ VALUE cCoBreakBase32;
 VALUE cCoBreakBase64;
 VALUE cCoBreakCesar;
 VALUE cCoBreakBinary;
+VALUE cCoBreakVigenere;
 
 char b32[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 char b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -292,6 +293,73 @@ VALUE binary_decode(VALUE self, VALUE full) {
     return rb_str_new2(strb);
 }
 
+// Define Vigenère
+void vigenere_encode_block(const char *input, const char *key, char *output) {
+    size_t input_len = strlen(input);
+    size_t key_len = strlen(key);
+    
+    for (size_t i = 0, j = 0; i < input_len; i++) {
+        char c = input[i];
+
+        if (c >= 'A' && c <= 'Z') {
+            output[i] = (c - 'A' + (key[j % key_len] - 'A')) % 26 + 'A';
+            j++;
+        } else if (c >= 'a' && c <= 'z') {
+            output[i] = (c - 'a' + (key[j % key_len] - 'a')) % 26 + 'a';
+            j++;
+        } else {
+            output[i] = c;
+        }
+    }
+    output[input_len] = '\0';
+}
+
+VALUE vigenere_encode(VALUE self, VALUE str, VALUE key) {
+    char *input = RSTRING_PTR(str);
+    char *key_str = RSTRING_PTR(key);
+    char output[1024];
+
+    vigenere_encode_block(input, key_str, output);
+    return rb_str_new2(output);
+}
+
+void vigenere_decode_block(const char *input, const char *key, char *output) {
+    size_t input_len = strlen(input);
+    size_t key_len = strlen(key);
+    
+    for (size_t i = 0, j = 0; i < input_len; i++) {
+        char c = input[i];
+
+        if (c >= 'A' && c <= 'Z') {
+            output[i] = (c - 'A' - (key[j % key_len] - 'A') + 26) % 26 + 'A';
+            j++;
+        } else if (c >= 'a' && c <= 'z') {
+            output[i] = (c - 'a' - (key[j % key_len] - 'a') + 26) % 26 + 'a';
+            j++;
+        } else {
+            output[i] = c;
+        }
+    }
+    output[input_len] = '\0';
+}
+
+VALUE vigenere_decode(VALUE self, VALUE str, VALUE key) {
+    char *input = RSTRING_PTR(str);
+    char *key_str = RSTRING_PTR(key);
+    char output[1024];
+
+    vigenere_decode_block(input, key_str, output);
+    return rb_str_new2(output);
+}
+
+void init_cobreak_cipher() {
+
+    VALUE cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
+
+    rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
+    rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
+}
+
 void init_cobreak_cipher() {
     //Define module Cipher in mCoBreak
     mCoBreakCipher = rb_define_module_under(mCoBreak, "Cipher");
@@ -330,4 +398,11 @@ void init_cobreak_cipher() {
     //Define method for class Binary
     rb_define_singleton_method(cCoBreakBinary, "encode", binary_encode, 1);
     rb_define_singleton_method(cCoBreakBinary, "decode", binary_decode, 1);
+
+    //Define class Vigenere in module mCoBreakCipher
+    cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
+
+    //Define method for class Binary
+    rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 1);
+    rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 1);
 }

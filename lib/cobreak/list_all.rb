@@ -3,7 +3,7 @@ module CoBreak
     #all list formats and types
     def initialize(options)
       all = Array.new
-      all << "Base64" << "Base32" << "Base16" << "Ascii85" << "Binary" << "Cesar"
+      all << "Base64" << "Base32" << "Base16" << "Ascii85" << "Binary" << "Cesar" << "Vigenere"
       if (options.list.eql?("cipher"))
         list_cipher = all.map do |type|
           {category: 'Cipher', name: type}

@@ -40,37 +40,75 @@ class Forze_brute
       puts e.message
       exit
     end
+
     forzebrute = OpenStruct.new
     @hash_input = dato
     @type_hash = type
     @out = out
     @verbose = verbose
     @wordlist = wordlist
+
     File.foreach(File.join(Gem.path[1], "gems","cobreak-#{CoBreak.version}" , "lib", "cobreak", "config", "database.db"), mode: 'r'){|booleano|
     forzebrute.booleano = booleano
     if (booleano.eql?('true'))
       verify(dato)
     end
     }
-      if (type_hash.downcase.eql?('md4'))
-        @crypt = OpenSSL::Digest::MD4.new
-      elsif (type_hash.downcase.eql?('md5'))
-        @crypt = OpenSSL::Digest::MD5.new
-      elsif (type_hash.downcase.eql?('sha1'))
-        @crypt = OpenSSL::Digest::SHA1.new
-      elsif (type_hash.downcase.eql?('sha224'))
-        @crypt = OpenSSL::Digest::SHA224.new
-      elsif (type_hash.downcase.eql?('sha256'))
-        @crypt = OpenSSL::Digest::SHA256.new
-      elsif (type_hash.downcase.eql?('sha384'))
-        @crypt = OpenSSL::Digest::SHA384.new
-      elsif (type_hash.downcase.eql?('sha512'))
-        @crypt = OpenSSL::Digest::SHA512.new
-      elsif (type_hash.downcase.eql?('ripemd160'))
-        @crypt = OpenSSL::Digest::RIPEMD160.new
-      end
-      lin = 0
+
+    if (type_hash.downcase.eql?('md4'))
       forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::MD5.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('md5'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::MD5.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('half-md5'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::HALF_MD5.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('sha1'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::SHA1.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('double-sha1'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::DOUBLE_SHA1.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('sha2-224'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::SHA2_224.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('sha256'))
+      @crypt = OpenSSL::Digest::SHA256.new
+    elsif (type_hash.downcase.eql?('sha384'))
+      @crypt = OpenSSL::Digest::SHA384.new
+    elsif (type_hash.downcase.eql?('sha512'))
+      @crypt = OpenSSL::Digest::SHA512.new
+    elsif (type_hash.downcase.eql?('ripemd160'))
+      @crypt = OpenSSL::Digest::RIPEMD160.new
+    end
+
+    if !(result.nil?)
+      puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Password Crack: #{result}"
+      #puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Number of lines: #{lin}"
+      puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Hash Cracking in #{Time.now - forzebrute.time} seconds"
+      if !(out.nil?)
+        File.open(out, mode: 'a'){|out|
+          out.puts "=================================================="
+          out.puts "software: CoBreak #{CoBreak.version}"
+          out.puts "Type Hash: #{type_hash}\n"
+          out.puts "#{result.chomp}:#{crypt.hexdigest(result)}"
+          out.puts "=================================================="
+        }
+      end
+    else
+      puts "\r\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Not Cracking Text: #{hash_input}"
+      puts "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Time: #{Time.now - forzebrute.time} seconds\e[0m"
+    end
+    
+    if (forzebrute.booleano.eql?('true'))
+      $datBas::database(hash_input)
+      DB::database(result, File.join(Gem.path[1], "gems", "cobreak-#{CoBreak.version}", 'lib', 'cobreak', 'show', "#{out_db}.db"))
+    end
+
+      
+
+=begin
         begin
           if (verbose)
             thread = Thread.new do
@@ -108,29 +146,9 @@ class Forze_brute
             end
             sleep(0.1)
           end
-          if (verbose == false)
-            puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Password Crack: #{result}"
-            puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Number of lines: #{lin}"
-            puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Hash Cracking in #{Time.now - forzebrute.time} seconds"
-          else
-            puts "\r\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Not Cracking Text: #{hash_input}"
-            puts "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Time: #{Time.now - forzebrute.time} seconds\e[0m"
-          end
-          if (forzebrute.booleano.eql?('true'))
-            $datBas::database(crypt.hexdigest(wordlist.chomp))
-            DB::database(result, File.join(Gem.path[1], "gems", "cobreak-#{CoBreak.version}", 'lib', 'cobreak', 'show', "#{out_db}.db"))
-          end
-          if !(result.nil?)
-            if !(out.nil?)
-              File.open(out, mode: 'a'){|out|
-                out.puts "=================================================="
-                out.puts "software: CoBreak #{CoBreak.version}"
-                out.puts "Type Hash: #{type_hash}\n"
-                out.puts "#{result.chomp}:#{crypt.hexdigest(result)}"
-                out.puts "=================================================="
-              }
-            end
-          end
+
+          
+          
         rescue Interrupt
         puts "\n\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Interrupt mode"
         puts "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Password Not Cracked"
@@ -138,6 +156,7 @@ class Forze_brute
         puts "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Wait Time: #{Time.now - forzebrute.time} seconds\e[0m"
         exit
       end
+=end
   end
   def chars(dato, range, char, type, out, verbose = false)
     begin
