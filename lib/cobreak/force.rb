@@ -96,7 +96,7 @@ class Forze_brute
       @result = CoBreak::AttackWordlist::SHA3_512.crack(hash_input, wordlist)
     elsif (type_hash.downcase.eql?('ripemd-160'))
       forzebrute.time = Time.now
-      @result = CoBreak::AttackWordlist::RIPEMD160.crack(hash_input, wordlist)
+      @result = CoBreak::AttackWordlist::RIPEMD_160.crack(hash_input, wordlist)
     end
 
     if !(result.nil?)
