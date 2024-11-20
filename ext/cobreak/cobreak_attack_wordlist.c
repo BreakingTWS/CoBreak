@@ -452,7 +452,7 @@ void calcular_sha2_256(const char *cadena, unsigned char *hash) {
     gcry_md_close(handle);
 }
 
-int comparar_hashes_sha2_224(const unsigned char *hash1, const unsigned char *hash2) {
+int comparar_hashes_sha2_256(const unsigned char *hash1, const unsigned char *hash2) {
     return memcmp(hash1, hash2, 32) == 0;
 }
 
