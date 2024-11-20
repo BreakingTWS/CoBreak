@@ -18,7 +18,7 @@ module CoBreak
         decipher.result = CoBreak::Cipher::Cesar.decode(decipher.dato, ARGV[0].to_i)
       elsif (decipher.mode.eql?('binary'))
         decipher.result = CoBreak::Cipher::Binary.decode(decipher.dato)
-      elsif (cipher.mode.eql?('vigenere'))
+      elsif (decipher.mode.eql?('vigenere'))
         decipher.result = CoBreak::Cipher::Vigenere.decode(decipher.dato, ARGV[0].to_s)
       end
       unless (decipher.result.nil?) or (decipher.result.eql?(decipher.dato))
