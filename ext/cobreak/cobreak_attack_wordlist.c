@@ -535,7 +535,7 @@ void hex_a_hash_sha2_384(const char *hex, unsigned char *hash) {
     }
 }
 
-VALUE attackwordlist_sha384(VALUE self, VALUE hash, VALUE dictionary) {
+VALUE attackwordlist_sha2_384(VALUE self, VALUE hash, VALUE dictionary) {
     FILE *archivo = fopen(StringValueCStr(dictionary), "r");
     if (archivo == NULL) {
         rb_raise(rb_eIOError, "Error al abrir el archivo de texto");
