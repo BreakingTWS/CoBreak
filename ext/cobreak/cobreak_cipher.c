@@ -400,9 +400,9 @@ void init_cobreak_cipher() {
     rb_define_singleton_method(cCoBreakBinary, "decode", binary_decode, 1);
 
     //Define class Vigenere in module mCoBreakCipher
-    cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
+    //cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
 
     //Define method for class Binary
-    rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
-    rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
+    //rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
+    //rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
 }
