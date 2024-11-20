@@ -20,6 +20,8 @@ module CoBreak
         cipher.result = CoBreak::Cipher::Binary.encode(dato)
       elsif (cipher.mode.eql?('vigenere'))
         cipher.result = CoBreak::Cipher::Vigenere.encode(dato, ARGV[0].to_s)
+      else
+        puts "not found"
       end
       unless (cipher.result.nil?) or (cipher.result.eql?(cipher.dato))
         puts "\n\e[1;32m[\e[37m+\e[1;32m]\e[37m Ciphertext: #{cipher.result}"
