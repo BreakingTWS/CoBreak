@@ -594,7 +594,7 @@ void calcular_sha2_512(const char *cadena, unsigned char *hash) {
     gcry_md_open(&handle, GCRY_MD_SHA512, 0);
     gcry_md_write(handle, cadena, strlen(cadena));
     gcry_md_final(handle);
-    memcpy(hash, gcry_md_read(handle, GCRY_MD_SHA512), 48);
+    memcpy(hash, gcry_md_read(handle, GCRY_MD_SHA512), 64);
     gcry_md_close(handle);
 }
 
