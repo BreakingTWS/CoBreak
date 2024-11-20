@@ -956,10 +956,10 @@ VALUE attackwordlist_sha3_512(VALUE self, VALUE hash, VALUE dictionary) {
 //Define Ripemd-160 Crack
 void calcular_ripemd_160(const char *cadena, unsigned char *hash) {
     gcry_md_hd_t handle;
-    gcry_md_open(&handle, GCRY_MD_RIPEMD160, 0);
+    gcry_md_open(&handle, GCRY_MD_RMD160, 0);
     gcry_md_write(handle, cadena, strlen(cadena));
     gcry_md_final(handle);
-    memcpy(hash, gcry_md_read(handle, GCRY_MD_RIPEMD160), 20);
+    memcpy(hash, gcry_md_read(handle, GCRY_MD_RMD160), 20);
     gcry_md_close(handle);
 }
 
