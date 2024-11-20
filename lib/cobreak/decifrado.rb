@@ -18,6 +18,8 @@ module CoBreak
         decipher.result = CoBreak::Cipher::Cesar.decode(decipher.dato, ARGV[0].to_i)
       elsif (decipher.mode.eql?('binary'))
         decipher.result = CoBreak::Cipher::Binary.decode(decipher.dato)
+      elsif (cipher.mode.eql?('vigenere'))
+        cipher.result = CoBreak::Cipher::Vigenere.decode(dato, ARGV[0].to_s)
       end
       unless (decipher.result.nil?) or (decipher.result.eql?(decipher.dato))
         puts "\n\e[1;32m[\e[37m+\e[1;32m]\e[37m DecipherText: #{decipher.result}"
