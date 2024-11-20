@@ -294,6 +294,7 @@ VALUE binary_decode(VALUE self, VALUE full) {
 }
 
 // Define Vigenère
+/*
 void vigenere_encode_block(const char *input, const char *key, char *output) {
     size_t input_len = strlen(input);
     size_t key_len = strlen(key);
@@ -359,7 +360,7 @@ void init_cobreak_cipher() {
     rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
     rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
 }
-
+*/
 void init_cobreak_cipher() {
     //Define module Cipher in mCoBreak
     mCoBreakCipher = rb_define_module_under(mCoBreak, "Cipher");
