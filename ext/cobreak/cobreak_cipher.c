@@ -294,7 +294,6 @@ VALUE binary_decode(VALUE self, VALUE full) {
 }
 
 // Define Vigenère
-/*
 void vigenere_encode_block(const char *input, const char *key, char *output) {
     size_t input_len = strlen(input);
     size_t key_len = strlen(key);
@@ -353,14 +352,7 @@ VALUE vigenere_decode(VALUE self, VALUE str, VALUE key) {
     return rb_str_new2(output);
 }
 
-void init_cobreak_cipher() {
 
-    VALUE cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
-
-    rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
-    rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
-}
-*/
 void init_cobreak_cipher() {
     //Define module Cipher in mCoBreak
     mCoBreakCipher = rb_define_module_under(mCoBreak, "Cipher");
@@ -401,9 +393,9 @@ void init_cobreak_cipher() {
     rb_define_singleton_method(cCoBreakBinary, "decode", binary_decode, 1);
 
     //Define class Vigenere in module mCoBreakCipher
-    //cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
+    cCoBreakVigenere = rb_define_class_under(mCoBreakCipher, "Vigenere", rb_cObject);
 
     //Define method for class Binary
-    //rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
-    //rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
+    rb_define_singleton_method(cCoBreakVigenere, "encode", vigenere_encode, 2);
+    rb_define_singleton_method(cCoBreakVigenere, "decode", vigenere_decode, 2);
 }
