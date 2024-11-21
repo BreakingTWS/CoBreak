@@ -97,6 +97,9 @@ class Forze_brute
     elsif (type_hash.downcase.eql?('ripemd-160'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::RIPEMD_160.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('tiger-160'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::TIGER_160.crack(hash_input, wordlist)
     end
 
     if !(result.nil?)

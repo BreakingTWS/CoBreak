@@ -15,6 +15,7 @@ VALUE cCoBreakAttackWordlistSHA3_256;
 VALUE cCoBreakAttackWordlistSHA3_384;
 VALUE cCoBreakAttackWordlistSHA3_512;
 VALUE cCoBreakAttackWordlistRipemd_160;
+VALUE cCoBreakAttackWordlistTiger_160;
 
 #define BLOCK_SIZE 1024
 #define MAX_HASH_LENGTH_MD 16
@@ -1156,4 +1157,8 @@ void init_cobreak_attack_wordlist() {
     //Define class Ripemd-160 for AttackWordlist
     cCoBreakAttackWordlistRipemd_160 = rb_define_class_under(mCoBreakAttackWordlist, "RIPEMD_160", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistRipemd_160, "crack", attackwordlist_ripemd_160, 2);
+
+    //Define class Ripemd-160 for AttackWordlist
+    cCoBreakAttackWordlistTiger_160 = rb_define_class_under(mCoBreakAttackWordlist, "TIGER_160", rb_cObject);
+    rb_define_singleton_method(cCoBreakAttackWordlistTiger_160, "crack", attackwordlist_tiger, 2);
 }
