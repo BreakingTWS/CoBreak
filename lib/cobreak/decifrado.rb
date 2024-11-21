@@ -1,5 +1,3 @@
-require 'ascii85'
-
 module CoBreak
   class Decifrado
     def self.cipher(mode, dato)
