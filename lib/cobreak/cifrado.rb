@@ -1,5 +1,3 @@
-require 'ascii85'
-
 module CoBreak
   class Cifrado
     def self.cipher(mode, dato)
@@ -12,8 +10,6 @@ module CoBreak
         cipher.result = CoBreak::Cipher::Base32.encode(dato)
       elsif (cipher.mode.eql?('base64'))
         cipher.result = CoBreak::Cipher::Base64.encode(dato)
-      elsif (cipher.mode.eql?('ascii85'))
-        cipher.result = Ascii85.encode(dato)
       elsif (cipher.mode.eql?('cesar'))
         cipher.result = CoBreak::Cipher::Cesar.encode(dato, ARGV[0].to_i)
       elsif (cipher.mode.eql?('binary'))
