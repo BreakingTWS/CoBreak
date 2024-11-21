@@ -119,7 +119,7 @@ class Forze_brute
     
     if (forzebrute.booleano.eql?('true'))
       $datBas::database(hash_input)
-      DB::database(result, File.join(Gem.path[1], "gems", "cobreak-#{CoBreak.version}", 'lib', 'cobreak', 'show', "#{type_hash}.db"))
+      DB::database(result, File.join(Gem.path[1], "gems", "cobreak-#{CoBreak.version}", 'lib', 'cobreak', 'show', "#{type_hash.upcase}.db"))
     end
 
       
