@@ -5,6 +5,7 @@
         "cobreak_openssl.h": "c",
         "md4.h": "c",
         "cobreak_ascii85.h": "c",
-        "cobreak_binary.h": "c"
+        "cobreak_binary.h": "c",
+        "cobreak_attack_wordlist.h": "c"
     }
 }
