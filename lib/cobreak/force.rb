@@ -54,7 +54,7 @@ class Forze_brute
       verify(dato)
     end
     }
-
+    puts type_hash.downcase
     if (type_hash.downcase.eql?('md4'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::MD5.crack(hash_input, wordlist)
