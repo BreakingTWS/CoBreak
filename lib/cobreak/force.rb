@@ -127,6 +127,9 @@ class Forze_brute
     elsif (type_hash.downcase.eql?('whirlpool'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::WHIRLPOOL.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('stribog-256'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::STRIBOG_256.crack(hash_input, wordlist)
     end
 
     if !(result.nil?)
