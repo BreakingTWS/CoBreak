@@ -1329,11 +1329,11 @@ void calcular_blake2s_224(const char *cadena, unsigned char *hash) {
 }
 
 int comparar_hashes_blake2s_224(const unsigned char *hash1, const unsigned char *hash2) {
-    return memcmp(hash1, hash2, 20) == 0;
+    return memcmp(hash1, hash2, 28) == 0;
 }
 
 void hex_a_hash_blake2s_224(const char *hex, unsigned char *hash) {
-    for (size_t i = 0; i < 20; i++) {
+    for (size_t i = 0; i < 28; i++) {
         sscanf(hex + 2 * i, "%2hhx", &hash[i]);
     }
 }
@@ -1344,11 +1344,11 @@ VALUE attackwordlist_blake2s_224(VALUE self, VALUE hash, VALUE dictionary) {
         rb_raise(rb_eIOError, "Error al abrir el archivo de texto");
     }
 
-    unsigned char hash_objetivo[20];
+    unsigned char hash_objetivo[28];
     hex_a_hash_blake2s_224(StringValueCStr(hash), hash_objetivo);
     
     VALUE found_password = Qnil;
-    unsigned char hash_actual[20];
+    unsigned char hash_actual[28];
     
     char *lineas[BLOCK_SIZE];
     for (size_t i = 0; i < BLOCK_SIZE; i++) {
