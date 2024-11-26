@@ -1620,7 +1620,7 @@ void calcular_blake2b_512(const char *cadena, unsigned char *hash) {
     gcry_md_close(handle);
 }
 
-int comparar_hashes_blake2b_384(const unsigned char *hash1, const unsigned char *hash2) {
+int comparar_hashes_blake2b_512(const unsigned char *hash1, const unsigned char *hash2) {
     return memcmp(hash1, hash2, 64) == 0;
 }
 
