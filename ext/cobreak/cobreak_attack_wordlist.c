@@ -22,6 +22,7 @@ VALUE cCoBreakAttackWordlistBlake2b_160;
 VALUE cCoBreakAttackWordlistBlake2s_224;
 VALUE cCoBreakAttackWordlistBlake2s_256;
 VALUE cCoBreakAttackWordlistBlake2b_256;
+VALUE cCoBreakAttackWordlistBlake2b_384;
 
 #define BLOCK_SIZE 1024
 #define MAX_HASH_LENGTH_MD 16
@@ -1536,6 +1537,78 @@ VALUE attackwordlist_blake2b_256(VALUE self, VALUE hash, VALUE dictionary) {
     return found_password;
 }
 
+//Define Blake2b-384 Crack
+void calcular_blake2b_384(const char *cadena, unsigned char *hash) {
+    gcry_md_hd_t handle;
+    gcry_md_open(&handle, GCRY_MD_BLAKE2B_384, 0);
+    gcry_md_write(handle, cadena, strlen(cadena));
+    gcry_md_final(handle);
+    memcpy(hash, gcry_md_read(handle, GCRY_MD_BLAKE2B_384), 48);
+    gcry_md_close(handle);
+}
+
+int comparar_hashes_blake2b_256(const unsigned char *hash1, const unsigned char *hash2) {
+    return memcmp(hash1, hash2, 48) == 0;
+}
+
+void hex_a_hash_blake2b_384(const char *hex, unsigned char *hash) {
+    for (size_t i = 0; i < 48; i++) {
+        sscanf(hex + 2 * i, "%2hhx", &hash[i]);
+    }
+}
+
+VALUE attackwordlist_blake2b_384(VALUE self, VALUE hash, VALUE dictionary) {
+    FILE *archivo = fopen(StringValueCStr(dictionary), "r");
+    if (archivo == NULL) {
+        rb_raise(rb_eIOError, "Error al abrir el archivo de texto");
+    }
+
+    unsigned char hash_objetivo[32];
+    hex_a_hash_blake2b_384(StringValueCStr(hash), hash_objetivo);
+    
+    VALUE found_password = Qnil;
+    unsigned char hash_actual[32];
+    
+    char *lineas[BLOCK_SIZE];
+    for (size_t i = 0; i < BLOCK_SIZE; i++) {
+        lineas[i] = malloc(MAX_LINE_LENGTH * sizeof(char));
+        if (lineas[i] == NULL) {
+            fclose(archivo);
+            rb_raise(rb_eRuntimeError, "Error de asignación de memoria");
+        }
+    }
+
+    while (1) {
+        size_t count = 0;
+
+        for (size_t i = 0; i < BLOCK_SIZE && fgets(lineas[count], MAX_LINE_LENGTH, archivo); i++) {
+            lineas[count][strcspn(lineas[count], "\r\n")] = 0;
+            count++;
+        }
+
+        if (count == 0) {
+            break;
+        }
+
+        for (size_t i = 0; i < count; i++) {
+            calcular_blake2b_384(lineas[i], hash_actual);
+ 
+            if (comparar_hashes_blake2b_384(hash_actual, hash_objetivo)) {
+                if (found_password == Qnil) {
+                    found_password = rb_str_new_cstr(lineas[i]);
+                }
+            }
+        }
+    }
+
+    for (size_t i = 0; i < BLOCK_SIZE; i++) {
+        free(lineas[i]);
+    }
+    fclose(archivo);
+    
+    return found_password;
+}
+
 void init_cobreak_attack_wordlist() {
     //Define module AttackWordlist in mCoBreak
     VALUE mCoBreakAttackWordlist = rb_define_module_under(mCoBreak, "AttackWordlist");
@@ -1616,11 +1689,15 @@ void init_cobreak_attack_wordlist() {
     cCoBreakAttackWordlistBlake2s_224 = rb_define_class_under(mCoBreakAttackWordlist, "BLAKE2S_224", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistBlake2s_224, "crack", attackwordlist_blake2s_224, 2);
 
-    //Define class Blake2s-224 for AttackWordlist
+    //Define class Blake2s-256 for AttackWordlist
     cCoBreakAttackWordlistBlake2s_256 = rb_define_class_under(mCoBreakAttackWordlist, "BLAKE2S_256", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistBlake2s_256, "crack", attackwordlist_blake2s_256, 2);
 
-    //Define class Blake2s-224 for AttackWordlist
+    //Define class Blake2b-256 for AttackWordlist
     cCoBreakAttackWordlistBlake2b_256 = rb_define_class_under(mCoBreakAttackWordlist, "BLAKE2B_256", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistBlake2b_256, "crack", attackwordlist_blake2b_256, 2);
+
+    //Define class Blake2b-256 for AttackWordlist
+    cCoBreakAttackWordlistBlake2b_384 = rb_define_class_under(mCoBreakAttackWordlist, "BLAKE2B_384", rb_cObject);
+    rb_define_singleton_method(cCoBreakAttackWordlistBlake2b_384, "crack", attackwordlist_blake2b_384, 2);
 }
