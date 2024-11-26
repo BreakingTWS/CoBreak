@@ -1974,11 +1974,11 @@ void init_cobreak_attack_wordlist() {
     cCoBreakAttackWordlistWhirlpool = rb_define_class_under(mCoBreakAttackWordlist, "WHIRLPOOL", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistWhirlpool, "crack", attackwordlist_whirlpool, 2);
 
-    //Define class Whirlpool for AttackWordlist
+    //Define class -256 Stribog for AttackWordlist
     cCoBreakAttackWordlistStribog256 = rb_define_class_under(mCoBreakAttackWordlist, "STRIBOG_256", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistStribog256, "crack", attackwordlist_stribog_256, 2);
 
-    //Define class Whirlpool for AttackWordlist
+    //Define class Stribog-512 for AttackWordlist
     cCoBreakAttackWordlistStribog512 = rb_define_class_under(mCoBreakAttackWordlist, "STRIBOG_512", rb_cObject);
     rb_define_singleton_method(cCoBreakAttackWordlistStribog512, "crack", attackwordlist_stribog_512, 2);
 }
