@@ -117,6 +117,7 @@ module CoBreak
         when ('24')
           options.bruteforce = 'whirlpool'
         when ('25')
+          puts "PUTAA"
           options.bruteforce = 'stribog-256'
         when ('26')
           options.bruteforce = 'stribog-512'
