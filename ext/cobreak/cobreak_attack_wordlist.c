@@ -1658,7 +1658,7 @@ VALUE attackwordlist_blake2b_512(VALUE self, VALUE hash, VALUE dictionary) {
 }
 
 //Define Whirlpool Crack
-void calcular_blake2b_512(const char *cadena, unsigned char *hash) {
+void calcular_whirlpool(const char *cadena, unsigned char *hash) {
     gcry_md_hd_t handle;
     gcry_md_open(&handle, GCRY_MD_WHIRLPOOL, 0);
     gcry_md_write(handle, cadena, strlen(cadena));
