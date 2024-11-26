@@ -33,6 +33,7 @@ VALUE cCoBreakAttackWordlistBlake2b_384;
 VALUE cCoBreakAttackWordlistBlake2b_512;
 VALUE cCoBreakAttackWordlistWhirlpool;
 VALUE cCoBreakAttackWordlistStribog256;
+VALUE cCoBreakAttackWordlistStribog512;
 
 //initialize function
 void init_cobreak_attack_wordlist();

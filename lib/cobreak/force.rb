@@ -130,6 +130,9 @@ class Forze_brute
     elsif (type_hash.downcase.eql?('stribog-256'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::STRIBOG_256.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('stribog-512'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::STRIBOG_512.crack(hash_input, wordlist)
     end
 
     if !(result.nil?)
