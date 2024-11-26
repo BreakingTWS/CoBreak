@@ -1186,7 +1186,7 @@ int comparar_hashes_blake2s_160(const unsigned char *hash1, const unsigned char 
     return memcmp(hash1, hash2, 20) == 0;
 }
 
-void hex_a_hash_blake2s_128(const char *hex, unsigned char *hash) {
+void hex_a_hash_blake2s_160(const char *hex, unsigned char *hash) {
     for (size_t i = 0; i < 20; i++) {
         sscanf(hex + 2 * i, "%2hhx", &hash[i]);
     }
