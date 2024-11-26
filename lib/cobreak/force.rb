@@ -121,6 +121,9 @@ class Forze_brute
     elsif (type_hash.downcase.eql?('blake2b-384'))
       forzebrute.time = Time.now
       @result = CoBreak::AttackWordlist::BLAKE2B_384.crack(hash_input, wordlist)
+    elsif (type_hash.downcase.eql?('blake2b-512'))
+      forzebrute.time = Time.now
+      @result = CoBreak::AttackWordlist::BLAKE2B_512.crack(hash_input, wordlist)
     end
 
     if !(result.nil?)
