@@ -117,7 +117,7 @@ module CoBreak
         when ('24')
           options.bruteforce = 'whirlpool'
         when ('25')
-          options.bruteforce = 'gost-streeboog-256'
+          options.bruteforce = 'stribog-256'
         when ('26')
           options.bruteforce = 'gost-streeboog-512'
         when ('27')
