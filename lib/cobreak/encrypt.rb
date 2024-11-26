@@ -97,7 +97,7 @@ class Encrypt
     unless (encrypt.crypt.nil?)
       puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Encrypted Text: #{encrypt.crypt}"
       puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Bits: #{encrypt.crypt.length}"
-      puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Bits: #{encrypt.crypt.length/2}"
+      puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Bytes: #{encrypt.crypt.length/2}"
       begin
         if bool.eql?('true')
           $datBas::database(encrypt.crypt)
