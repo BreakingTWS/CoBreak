@@ -119,7 +119,7 @@ module CoBreak
         when ('25')
           options.bruteforce = 'stribog-256'
         when ('26')
-          options.bruteforce = 'gost-streeboog-512'
+          options.bruteforce = 'stribog-512'
         when ('27')
           options.bruteforce = 'shake-128'
         else
