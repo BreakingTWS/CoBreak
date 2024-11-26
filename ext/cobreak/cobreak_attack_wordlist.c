@@ -1547,7 +1547,7 @@ void calcular_blake2b_384(const char *cadena, unsigned char *hash) {
     gcry_md_close(handle);
 }
 
-int comparar_hashes_blake2b_256(const unsigned char *hash1, const unsigned char *hash2) {
+int comparar_hashes_blake2b_384(const unsigned char *hash1, const unsigned char *hash2) {
     return memcmp(hash1, hash2, 48) == 0;
 }
 
@@ -1563,11 +1563,11 @@ VALUE attackwordlist_blake2b_384(VALUE self, VALUE hash, VALUE dictionary) {
         rb_raise(rb_eIOError, "Error al abrir el archivo de texto");
     }
 
-    unsigned char hash_objetivo[32];
+    unsigned char hash_objetivo[48];
     hex_a_hash_blake2b_384(StringValueCStr(hash), hash_objetivo);
     
     VALUE found_password = Qnil;
-    unsigned char hash_actual[32];
+    unsigned char hash_actual[48];
     
     char *lineas[BLOCK_SIZE];
     for (size_t i = 0; i < BLOCK_SIZE; i++) {
