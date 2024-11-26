@@ -27,7 +27,7 @@ module CoBreak
           if (File.exists?(@options.algo));
             IO.foreach(@options.algo){|line|
               line.chomp!
-              if (@options.cipher?(@options.enc.capitalize))
+              if (@options.cipher.include?(@options.enc.capitalize))
                 CoBreak::Cifrado.cipher(line.to_s)
               end
               if (@options.cipher.include?(@options.dec.capitalize))
