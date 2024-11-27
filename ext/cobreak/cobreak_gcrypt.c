@@ -16,7 +16,7 @@ VALUE cCoBreakGCrypthaval_160;
 VALUE cCoBreakGCryptwhirlpool;
 VALUE cCoBreakGCryptgost_streebog_256;
 VALUE cCoBreakGCryptgost_streebog_512;
-/*
+
 VALUE md5_hexdigest(VALUE self, VALUE full) {
     char *str = RSTRING_PTR(full);
     int length = RSTRING_LEN(full); 
@@ -46,7 +46,7 @@ VALUE md5_hexdigest(VALUE self, VALUE full) {
 
     VALUE result = rb_str_new2(out); 
     return result;
-}*/
+}
 
 VALUE tiger160_hexdigest(VALUE self, VALUE full) {
     char *str = RSTRING_PTR(full);
@@ -430,8 +430,8 @@ void init_cobreak_gcrypt(){
     //Define module GCrypt in mCoBreak
     mCoBreakGCrypt = rb_define_module_under(mCoBreak, "GCrypt");
     //Define Class MD5 encrypt mode
-    //cCoBreakGCryptmd5 = rb_define_class_under(mCoBreakGCrypt, "MD5", rb_cObject);
-    //rb_define_singleton_method(cCoBreakGCryptmd5, "hexdigest", md5_hexdigest, 1);
+    cCoBreakGCryptmd5 = rb_define_class_under(mCoBreakGCrypt, "MD5", rb_cObject);
+    rb_define_singleton_method(cCoBreakGCryptmd5, "hexdigest", md5_hexdigest, 1);
     //Define Class TIGER-160 encrypt mode
     cCoBreakGCrypttiger160 = rb_define_class_under(mCoBreakGCrypt, "TIGER_160", rb_cObject);
     rb_define_singleton_method(cCoBreakGCrypttiger160, "hexdigest", tiger160_hexdigest, 1);
