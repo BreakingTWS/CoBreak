@@ -133,7 +133,6 @@ module CoBreak
       end
       CoBreak::List.new(options)
       unless (options.wordlist.nil?) or (options.wordlist.empty?)
-        puts options.bruteforce
         bruteforce = CoBreak::BruteForze.new(options)
         bruteforce.banner_wordlist()
         bruteforce.wordlist
