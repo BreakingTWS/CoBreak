@@ -30,7 +30,8 @@ module CoBreak
         puts "=" * 8 + "+" + "=" * 34 + "+" + "=" * 20
         salt = " "
         list_algorithms.each_with_index do |hash, index|
-          puts " " * 2 + "#{index + 1}" + " " * 4 + salt + "|" + " " * 2 + "#{hash[:name].ljust(31)} | #{hash[:category].ljust(8)}"
+          puts " " * 2 + "#{index}" + " " * 4 + salt + "|" + " " * 2 + "#{hash[:name].ljust(31)} | #{hash[:category].ljust(8)}"
+          index += 1
           if(index==8)
             salt = ""
           end
