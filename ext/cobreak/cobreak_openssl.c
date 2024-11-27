@@ -400,8 +400,8 @@ void init_cobreak_openssl(){
                 cCoBreakOpenSSLmd4 = rb_define_class_under(mCoBreakOpenSSL, "MD4", rb_cObject);
                 rb_define_singleton_method(cCoBreakOpenSSLmd4, "hexdigest", md4_hexdigest, 1);
                 //Define Class MD5 encrypt mode
-                cCoBreakOpenSSLmd5 = rb_define_class_under(mCoBreakOpenSSL, "MD5", rb_cObject);
-                rb_define_singleton_method(cCoBreakOpenSSLmd5, "hexdigest", md5_hexdigest, 1);
+                //cCoBreakOpenSSLmd5 = rb_define_class_under(mCoBreakOpenSSL, "MD5", rb_cObject);
+                //rb_define_singleton_method(cCoBreakOpenSSLmd5, "hexdigest", md5_hexdigest, 1);
                 //Define Class MD5 encrypt mode
                 cCoBreakOpenSSLhalf_md5 = rb_define_class_under(mCoBreakOpenSSL, "HALF_MD5", rb_cObject);
                 rb_define_singleton_method(cCoBreakOpenSSLhalf_md5, "hexdigest", half_md5_hexdigest, 1);
