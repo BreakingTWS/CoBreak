@@ -431,7 +431,7 @@ void init_cobreak_gcrypt(){
     mCoBreakGCrypt = rb_define_module_under(mCoBreak, "GCrypt");
     //Define Class MD5 encrypt mode
     cCoBreakGCryptmd5 = rb_define_class_under(mCoBreakGCrypt, "MD5", rb_cObject);
-    rb_define_singleton_method(cCoBreakGCrypttiger160, "hexdigest", tiger160_hexdigest, 1);
+    rb_define_singleton_method(cCoBreakGCryptmd5, "hexdigest", md5_hexdigest, 1);
     //Define Class TIGER-160 encrypt mode
     cCoBreakGCrypttiger160 = rb_define_class_under(mCoBreakGCrypt, "TIGER_160", rb_cObject);
     rb_define_singleton_method(cCoBreakGCrypttiger160, "hexdigest", tiger160_hexdigest, 1);
