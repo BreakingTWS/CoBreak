@@ -458,35 +458,63 @@ VALUE streebog_512_hexdigest(VALUE self, VALUE input) {
     return result;
 }
 
-VALUE shake_128_hexdigest(VALUE self, VALUE full) {
+VALUE shake_128_hexdigest(VALUE self, VALUE full, VALUE length) {
+
     char *str = RSTRING_PTR(full);
-    int length = RSTRING_LEN(full); 
+
+    int input_length = RSTRING_LEN(full);
+
+    int output_length = NUM2INT(length); // Longitud de salida deseada
+
     gcry_md_hd_t handle;
-    unsigned char digest[64]; 
-    char out[129];
+
+    unsigned char *digest;
+
+    char *out;
+
 
     if (!gcry_check_version(GCRYPT_VERSION)) {
+
         rb_raise(rb_eRuntimeError, "Versión de libgcrypt no compatible.");
+
     }
 
-   
+
     gcry_md_open(&handle, GCRY_MD_SHAKE128, 0);
+
+    gcry_md_write(handle, str, input_length);
+
     
-    
-    gcry_md_write(handle, str, length);
-    
-   
-    memcpy(digest, gcry_md_read(handle, GCRY_MD_SHAKE128), 16);
+
+    // Allocate memory for the output
+
+    digest = gcry_md_read(handle, GCRY_MD_SHAKE128);
+
     gcry_md_close(handle);
 
-    
-    for (int n = 0; n < 64; ++n) {
-        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
-    }
-    out[129] = '\0'; 
 
-    VALUE result = rb_str_new2(out); 
+    // Allocate output buffer for hexadecimal string
+
+    out = ALLOC_N(char, output_length * 2 + 1); // +1 for null terminator
+
+
+    // Convert to hexadecimal
+
+    for (int n = 0; n < output_length; ++n) {
+
+        sprintf(&(out[n * 2]), "%02x", digest[n]);
+
+    }
+
+    out[output_length * 2] = '\0'; // Null terminator
+
+
+    VALUE result = rb_str_new2(out);
+
+    xfree(out); // Free allocated memory
+
     return result;
+
 }
 
 void init_cobreak_gcrypt(){
