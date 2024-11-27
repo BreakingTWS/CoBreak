@@ -464,7 +464,7 @@ VALUE shake_128_hexdigest(VALUE self, VALUE full, VALUE length) {
 
     int input_length = RSTRING_LEN(full);
 
-    int output_length = NUM2INT(length); // Longitud de salida deseada
+    int output_length = NUM2INT(128); // Longitud de salida deseada
 
     gcry_md_hd_t handle;
 
