@@ -18,10 +18,10 @@ module CoBreak
         param.separator "Mode Cryptography"
         param.on('--encrypt=[FORMAT]', String, 'encrypt parameter'){|en_en| options.encrypt = en_en}
         param.separator "Mode BruteForce"
-        param.on('--bw', String, 'brute force mode to crack a hash whitch wordlist format'){|modeforce|options.bruteforce = modeforce}
+        param.on('--bword', String, 'brute force mode to crack a hash whitch wordlist format'){|modeforce|options.bruteforce = modeforce}
         param.on('--bchar', String, 'brute force mode to crack a hash whitch char generator format'){|modeforce|options.bruteforce = modeforce}
-        param.on('--bcipher', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforce|options.bruteforce = modeforce}
-        param.on('--bcipherw', String, 'brute force mode to crack a cipher whitch char generator'){|modeforce|options.bruteforce = modeforce}
+        param.on('--bcword', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforce|options.bruteforce = modeforce}
+        param.on('--bcchar', String, 'brute force mode to crack a cipher whitch char generator'){|modeforce|options.bruteforce = modeforce}
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=encoding or encrypt', String, 'list cipher types of hash formats'){|lin| options.list = lin}
