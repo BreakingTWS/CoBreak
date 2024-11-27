@@ -53,7 +53,7 @@ class Encrypt
       when ('SHAKE-128')
         encrypt.crypt = CoBreak::GCrypt::SHAKE_128.hexdigest(dato)
         out_db = 'SHAKE-128'
-      when ('gost-streebog-256')
+      when ('stribog-256')
         encrypt.crypt = CoBreak::GCrypt::GOST_STREEBOG_256.hexdigest(dato)
         out_db = 'GOST-STREEBOG-256'
       when ('gost-streebog-512')
