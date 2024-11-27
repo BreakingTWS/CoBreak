@@ -19,8 +19,8 @@ module CoBreak
         param.on('--encrypt=[FORMAT]', String, 'encrypt parameter'){|en_en| options.encrypt = en_en}
         param.separator "Mode BruteForce"
         param.on('-bword', '--brutewordlist=DIGEST', String, 'brute force mode to crack a hash'){|modeforce|options.bruteforce = modeforce}
-        param.on('-bchar', '--brutewordlist=DIGEST', String, 'brute force mode to crack a hash'){|modeforce|options.bruteforce = modeforce}
-        param.on('-bcipher', '--brutewordlist=DIGEST', String, 'brute force mode to crack a hash'){|modeforce|options.bruteforce = modeforce}
+        param.on('-bchar', '--brutechar=DIGEST', String, 'brute force mode to crack a hash'){|modeforce|options.bruteforce = modeforce}
+        param.on('-bcipher', '--brutecipher=DIGEST', String, 'brute force mode to crack a hash'){|modeforce|options.bruteforce = modeforce}
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=encoding or encrypt', String, 'list cipher types of hash formats'){|lin| options.list = lin}
