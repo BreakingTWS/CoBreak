@@ -23,15 +23,17 @@ module CoBreak
         @options.enc = "" if @options.enc.nil? == true
         @options.dec = "" if @options.dec.nil? == true
         @options.cipher = %w[Base16 Base32 Base64 Ascii85 Binary Cesar Vigenere]
+        @options.force_cipher = %w[Cesar Vigenere]
         if (@options.cipher.include?(@options.enc.capitalize)) or (@options.cipher.include?(@options.dec.capitalize));
           if (File.exists?(@options.algo));
             IO.foreach(@options.algo){|line|
               line.chomp!
               if (@options.cipher.include?(@options.enc.capitalize))
                 CoBreak::Cifrado.cipher(line.to_s)
-              end
-              if (@options.cipher.include?(@options.dec.capitalize))
+              elsif (@options.cipher.include?(@options.dec.capitalize))
                 CoBreak::Decifrado.cipher(line.to_s)
+              else
+                CoBreak::BruteCipher.crack(line.to_s)
               end
             }
           else
