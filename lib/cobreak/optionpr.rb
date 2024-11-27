@@ -20,7 +20,7 @@ module CoBreak
         param.separator "Mode BruteForce"
         param.on('--bw', String, 'brute force mode to crack a hash whitch wordlist format'){|modeforce|options.bruteforce = modeforce}
         param.on('--bchar', String, 'brute force mode to crack a hash whitch char generator format'){|modeforce|options.bruteforce = modeforce}
-        param.on('--bcipherw', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforce|options.bruteforce = modeforce}
+        param.on('--bcipher', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforce|options.bruteforce = modeforce}
         param.on('--bcipherw', String, 'brute force mode to crack a cipher whitch char generator'){|modeforce|options.bruteforce = modeforce}
         param.separator ""
         param.separator "Options:"
