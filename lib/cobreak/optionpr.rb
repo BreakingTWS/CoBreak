@@ -18,10 +18,10 @@ module CoBreak
         param.separator "Mode Cryptography"
         param.on('--encrypt=[FORMAT]', String, 'encrypt parameter'){|en_en| options.encrypt = en_en}
         param.separator "Mode BruteForce"
-        param.on('-bword', '--brutehash=DIGEST', String, 'brute force mode to crack a hash whitch wordlist format'){|modeforcehash|options.bruteforce = modeforcehash}
-        param.on('-bchar', '--brutehashchar=DIGEST', String, 'brute force mode to crack a hash whitch char generator format'){|modeforcehashchar|options.bruteforce = modeforcehashchar}
-        param.on('-bcipherw', '--brutecipher=CIPHER', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforcechiper|options.bruteforce = modeforcechiper}
-        param.on('-bcipherw', '--brutecipherchar=CIPHER', String, 'brute force mode to crack a cipher whitch char generator'){|modeforcecipherchar|options.bruteforce = modeforcecipherchar}
+        param.on('-bword', '--brutehash=DIGEST', String, 'brute force mode to crack a hash whitch wordlist format'){|modeforcehash|options.bruteforceforcehash = modeforcehash}
+        param.on('-bchar', '--brutehashchar=DIGEST', String, 'brute force mode to crack a hash whitch char generator format'){|modeforcehashchar|options.forcehashchar = modeforcehashchar}
+        param.on('-bcipherw', '--brutecipher=CIPHER', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforcechiper|options.bruteforcechiper = modeforcechiper}
+        param.on('-bcipherw', '--brutecipherchar=CIPHER', String, 'brute force mode to crack a cipher whitch char generator'){|modeforcecipherchar|options.bruteforcechiperchar = modeforcecipherchar}
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=encoding or encrypt', String, 'list cipher types of hash formats'){|lin| options.list = lin}
