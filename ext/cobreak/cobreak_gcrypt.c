@@ -462,8 +462,8 @@ VALUE shake_128_hexdigest(VALUE self, VALUE full) {
     char *str = RSTRING_PTR(full);
     int length = RSTRING_LEN(full); 
     gcry_md_hd_t handle;
-    unsigned char digest[16]; 
-    char out[41];
+    unsigned char digest[64]; 
+    char out[129];
 
     if (!gcry_check_version(GCRYPT_VERSION)) {
         rb_raise(rb_eRuntimeError, "Versión de libgcrypt no compatible.");
@@ -480,10 +480,10 @@ VALUE shake_128_hexdigest(VALUE self, VALUE full) {
     gcry_md_close(handle);
 
     
-    for (int n = 0; n < 16; ++n) {
+    for (int n = 0; n < 64; ++n) {
         sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
     }
-    out[41] = '\0'; 
+    out[129] = '\0'; 
 
     VALUE result = rb_str_new2(out); 
     return result;
