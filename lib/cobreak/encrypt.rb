@@ -95,6 +95,9 @@ class Encrypt
       when ('whirlpool')
         encrypt.crypt = CoBreak::GCrypt::WHIRLPOOL.hexdigest(dato)
         out_db = 'WHIRLPOOL'
+      when ('shake-128')
+        encrypt.crypt = CoBreak::GCrypt::SHAKE_128.hexdigest(dato)
+        out_db = 'SHAKE-128'
       else "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Type Hash Not Found"
     end
     unless (encrypt.crypt.nil?)

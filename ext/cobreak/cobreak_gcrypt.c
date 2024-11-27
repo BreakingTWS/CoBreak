@@ -13,10 +13,10 @@ VALUE cCoBreakGCryptblake2s_256;
 VALUE cCoBreakGCryptblake2b_256;
 VALUE cCoBreakGCryptblake2b_384;
 VALUE cCoBreakGCryptblake2b_512;
-VALUE cCoBreakGCrypthaval_160;
 VALUE cCoBreakGCryptwhirlpool;
 VALUE cCoBreakGCryptgost_streebog_256;
 VALUE cCoBreakGCryptgost_streebog_512;
+VALUE cCoBreakGCryptshake_128;
 
 VALUE md4_hexdigest(VALUE self, VALUE full) {
     char *str = RSTRING_PTR(full);
@@ -458,6 +458,37 @@ VALUE streebog_512_hexdigest(VALUE self, VALUE input) {
     return result;
 }
 
+VALUE shake_128_hexdigest(VALUE self, VALUE full) {
+    char *str = RSTRING_PTR(full);
+    int length = RSTRING_LEN(full); 
+    gcry_md_hd_t handle;
+    unsigned char digest[16]; 
+    char out[41];
+
+    if (!gcry_check_version(GCRYPT_VERSION)) {
+        rb_raise(rb_eRuntimeError, "Versión de libgcrypt no compatible.");
+    }
+
+   
+    gcry_md_open(&handle, GCRY_MD_SHAKE128, 0);
+    
+    
+    gcry_md_write(handle, str, length);
+    
+   
+    memcpy(digest, gcry_md_read(handle, GCRY_MD_SHAKE128), 16);
+    gcry_md_close(handle);
+
+    
+    for (int n = 0; n < 16; ++n) {
+        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
+    }
+    out[41] = '\0'; 
+
+    VALUE result = rb_str_new2(out); 
+    return result;
+}
+
 void init_cobreak_gcrypt(){
     //Define module GCrypt in mCoBreak
     mCoBreakGCrypt = rb_define_module_under(mCoBreak, "GCrypt");
@@ -506,4 +537,7 @@ void init_cobreak_gcrypt(){
     //Define Class GOST_STREEBOG_512 encrypt mode
     cCoBreakGCryptgost_streebog_512 = rb_define_class_under(mCoBreakGCrypt, "GOST_STREEBOG_512", rb_cObject);
     rb_define_singleton_method(cCoBreakGCryptgost_streebog_512, "hexdigest", streebog_512_hexdigest, 1);
+    //Define Class SHAKE_128 encrypt mode
+    cCoBreakGCryptshake_128 = rb_define_class_under(mCoBreakGCrypt, "SHAKE_128", rb_cObject);
+    rb_define_singleton_method(cCoBreakGCryptshake_128, "hexdigest", shake_128_hexdigest, 1);
 }
