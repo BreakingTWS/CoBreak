@@ -4,7 +4,7 @@
 #define MAX_HASH_LENGTH_MD 16
 #define MAX_LINE_LENGTH 256
 
-//Define MD5 Crack
+//Define MD4 Crack
 void calcular_hash_md4(const char *cadena, unsigned char *hash) {
     gcry_md_hd_t handle;
     gcry_md_open(&handle, GCRY_MD_MD4, 0);
