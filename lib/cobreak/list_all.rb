@@ -20,7 +20,7 @@ module CoBreak
         end
       end
       all.clear
-      all << "MD2" << "MD4" << "MD5" << "HALF-MD5" << "SHA1" << "DOUBLE-SHA1" << "SHA2-224" << "SHA2-256" << "SHA2-384" << "SHA2-512" << "SHA3-224" << "SHA3-256" << "SHA3-384" << "SHA3-512" << "RIPEMD-160" << "TIGER-160" << "BLAKE2S-128" << "BLAKE2S-160" << "BlAKE2B-160" << "BLAKE2S-224" << "BLAKE2S-256" << "BLAKE2B-256" << "BLAKE2B_384" << "BLAKE2B-512" << "WHIRLPOOL" << "GOST_STREEBOG_256" << "GOST_STREEBOG_256" << "SHAKE-128"
+      all << "MD4" << "MD5" << "HALF-MD5" << "SHA1" << "DOUBLE-SHA1" << "SHA2-224" << "SHA2-256" << "SHA2-384" << "SHA2-512" << "SHA3-224" << "SHA3-256" << "SHA3-384" << "SHA3-512" << "RIPEMD-160" << "TIGER-160" << "BLAKE2S-128" << "BLAKE2S-160" << "BlAKE2B-160" << "BLAKE2S-224" << "BLAKE2S-256" << "BLAKE2B-256" << "BLAKE2B_384" << "BLAKE2B-512" << "WHIRLPOOL" << "GOST_STREEBOG_256" << "GOST_STREEBOG_256" << "SHAKE-128"
       if (options.list.eql?("digest"))
         list_algorithms = all.map do |type|
           {category: 'Raw-Hash', name: type}
