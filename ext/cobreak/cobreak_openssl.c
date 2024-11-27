@@ -48,26 +48,6 @@ VALUE ripemd160_hexdigest(VALUE self, VALUE full){
     free(out);
 }
 
-VALUE md4_hexdigest(VALUE self, VALUE input) {
-    // Convertir el valor Ruby a una cadena C
-    char *str = RSTRING_PTR(input);
-    int length = RSTRING_LEN(input); // Obtener la longitud de la cadena
-    unsigned char digest[MD4_DIGEST_LENGTH]; // MD4 produce un hash de 16 bytes
-    char out[33]; // 16 bytes * 2 para hexadecimal + 1 para el terminador
-
-    // Calcular el hash MD4
-    MD4((unsigned char*)str, length, digest);
-
-    // Convertir el hash a una cadena hexadecimal
-    for (int n = 0; n < MD4_DIGEST_LENGTH; ++n) {
-        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
-    }
-    out[32] = '\0'; // Terminar la cadena
-
-    VALUE result = rb_str_new2(out); // Crear una nueva cadena Ruby
-    return result;
-}
-
 VALUE half_md5_hexdigest(VALUE self, VALUE input) {
     // Convertir el valor Ruby a una cadena C
     char *str = RSTRING_PTR(input);
