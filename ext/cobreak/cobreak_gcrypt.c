@@ -42,7 +42,7 @@ VALUE md5_hexdigest(VALUE self, VALUE full) {
     for (int n = 0; n < 16; ++n) {
         sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
     }
-    out[32] = '\0'; 
+    out[41] = '\0'; 
 
     VALUE result = rb_str_new2(out); 
     return result;
