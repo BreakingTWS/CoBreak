@@ -114,9 +114,9 @@ module CoBreak
           options.bruteforce = 'blake2b-384'
         when ('23')
           options.bruteforce = 'blake2b-512'
-        when ('25')
-          options.bruteforce = 'whirlpool'
         when ('24')
+          options.bruteforce = 'whirlpool'
+        when ('25')
           options.bruteforce = 'stribog-256'
         when ('26')
           options.bruteforce = 'stribog-512'
@@ -133,6 +133,7 @@ module CoBreak
       end
       CoBreak::List.new(options)
       unless (options.wordlist.nil?) or (options.wordlist.empty?)
+        puts options.bruteforce
         bruteforce = CoBreak::BruteForze.new(options)
         bruteforce.banner_wordlist()
         bruteforce.wordlist
