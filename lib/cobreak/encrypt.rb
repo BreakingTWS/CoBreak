@@ -56,7 +56,7 @@ class Encrypt
       when ('stribog-256')
         encrypt.crypt = CoBreak::GCrypt::GOST_STREEBOG_256.hexdigest(dato)
         out_db = 'GOST-STREEBOG-256'
-      when ('gost-streebog-512')
+      when ('stribog-512')
         encrypt.crypt = CoBreak::GCrypt::GOST_STREEBOG_512.hexdigest(dato)
         out_db = 'GOST-STREEBOG-512'
       when ('tiger-160')
