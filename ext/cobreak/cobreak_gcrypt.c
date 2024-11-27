@@ -1,6 +1,7 @@
 #include<cobreak_gcrypt.h>
 
 VALUE mCoBreakGCrypt;
+VALUE cCoBreakGCryptmd5;
 VALUE cCoBreakGCrypttiger160;
 VALUE cCoBreakGCryptdoublesha1;
 VALUE cCoBreakGCryptblake2s_128;
@@ -16,6 +17,36 @@ VALUE cCoBreakGCryptwhirlpool;
 VALUE cCoBreakGCryptgost_streebog_256;
 VALUE cCoBreakGCryptgost_streebog_512;
 
+VALUE md5_hexdigest(VALUE self, VALUE full) {
+    char *str = RSTRING_PTR(full);
+    int length = RSTRING_LEN(full); 
+    gcry_md_hd_t handle;
+    unsigned char digest[16]; 
+    char out[41];
+
+    if (!gcry_check_version(GCRYPT_VERSION)) {
+        rb_raise(rb_eRuntimeError, "Versión de libgcrypt no compatible.");
+    }
+
+   
+    gcry_md_open(&handle, GCRY_MD_MD5, 0);
+    
+    
+    gcry_md_write(handle, str, length);
+    
+   
+    memcpy(digest, gcry_md_read(handle, GCRY_MD_MD5), 16);
+    gcry_md_close(handle);
+
+    
+    for (int n = 0; n < 16; ++n) {
+        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
+    }
+    out[32] = '\0'; 
+
+    VALUE result = rb_str_new2(out); 
+    return result;
+}
 
 VALUE tiger160_hexdigest(VALUE self, VALUE full) {
     char *str = RSTRING_PTR(full);
@@ -398,6 +429,9 @@ VALUE streebog_512_hexdigest(VALUE self, VALUE input) {
 void init_cobreak_gcrypt(){
     //Define module GCrypt in mCoBreak
     mCoBreakGCrypt = rb_define_module_under(mCoBreak, "GCrypt");
+    //Define Class MD5 encrypt mode
+    cCoBreakGCryptmd5 = rb_define_class_under(mCoBreakGCrypt, "MD5", rb_cObject);
+    rb_define_singleton_method(cCoBreakGCrypttiger160, "hexdigest", tiger160_hexdigest, 1);
     //Define Class TIGER-160 encrypt mode
     cCoBreakGCrypttiger160 = rb_define_class_under(mCoBreakGCrypt, "TIGER_160", rb_cObject);
     rb_define_singleton_method(cCoBreakGCrypttiger160, "hexdigest", tiger160_hexdigest, 1);

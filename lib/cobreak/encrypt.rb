@@ -15,7 +15,7 @@ class Encrypt
         encrypt.crypt = CoBreak::OpenSSL::MD4.hexdigest(dato)
         out_db = 'MD4'
       when ('md5')
-        encrypt.crypt = CoBreak::OpenSSL::MD5.hexdigest(dato)
+        encrypt.crypt = CoBreak::GCrypt::MD5.hexdigest(dato)
         out_db = 'MD5'
       when ('half-md5')
         encrypt.crypt = CoBreak::OpenSSL::HALF_MD5.hexdigest(dato)
