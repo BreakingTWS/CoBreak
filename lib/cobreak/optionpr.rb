@@ -114,9 +114,9 @@ module CoBreak
           options.bruteforce = 'blake2b-384'
         when ('23')
           options.bruteforce = 'blake2b-512'
-        when ('24')
-          options.bruteforce = 'whirlpool'
         when ('25')
+          options.bruteforce = 'whirlpool'
+        when ('24')
           options.bruteforce = 'stribog-256'
         when ('26')
           options.bruteforce = 'stribog-512'
