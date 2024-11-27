@@ -69,7 +69,7 @@ VALUE md4_hexdigest(VALUE self, VALUE input) {
     VALUE result = rb_str_new2(out); // Crear una nueva cadena Ruby
     return result;
 }
-
+/*
 VALUE md5_hexdigest(VALUE self, VALUE input) {
     // Convertir el valor Ruby a una cadena C
     char *str = RSTRING_PTR(input);
@@ -89,7 +89,7 @@ VALUE md5_hexdigest(VALUE self, VALUE input) {
     VALUE result = rb_str_new2(out); // Crear una nueva cadena Ruby
     return result;
 }
-
+*/
 VALUE half_md5_hexdigest(VALUE self, VALUE input) {
     // Convertir el valor Ruby a una cadena C
     char *str = RSTRING_PTR(input);
