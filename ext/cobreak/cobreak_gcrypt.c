@@ -1,6 +1,8 @@
 #include<cobreak_gcrypt.h>
 
 VALUE mCoBreakGCrypt;
+VALUE cCoBreakGCryptmd2;
+VALUE cCoBreakGCryptmd4;
 VALUE cCoBreakGCryptmd5;
 VALUE cCoBreakGCrypttiger160;
 VALUE cCoBreakGCryptdoublesha1;
@@ -16,6 +18,68 @@ VALUE cCoBreakGCrypthaval_160;
 VALUE cCoBreakGCryptwhirlpool;
 VALUE cCoBreakGCryptgost_streebog_256;
 VALUE cCoBreakGCryptgost_streebog_512;
+
+VALUE md2_hexdigest(VALUE self, VALUE full) {
+    char *str = RSTRING_PTR(full);
+    int length = RSTRING_LEN(full); 
+    gcry_md_hd_t handle;
+    unsigned char digest[16]; 
+    char out[41];
+
+    if (!gcry_check_version(GCRYPT_VERSION)) {
+        rb_raise(rb_eRuntimeError, "Versión de libgcrypt no compatible.");
+    }
+
+   
+    gcry_md_open(&handle, GCRY_MD_MD2, 0);
+    
+    
+    gcry_md_write(handle, str, length);
+    
+   
+    memcpy(digest, gcry_md_read(handle, GCRY_MD_MD2), 16);
+    gcry_md_close(handle);
+
+    
+    for (int n = 0; n < 16; ++n) {
+        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
+    }
+    out[41] = '\0'; 
+
+    VALUE result = rb_str_new2(out); 
+    return result;
+}
+
+VALUE md4_hexdigest(VALUE self, VALUE full) {
+    char *str = RSTRING_PTR(full);
+    int length = RSTRING_LEN(full); 
+    gcry_md_hd_t handle;
+    unsigned char digest[16]; 
+    char out[41];
+
+    if (!gcry_check_version(GCRYPT_VERSION)) {
+        rb_raise(rb_eRuntimeError, "Versión de libgcrypt no compatible.");
+    }
+
+   
+    gcry_md_open(&handle, GCRY_MD_MD4, 0);
+    
+    
+    gcry_md_write(handle, str, length);
+    
+   
+    memcpy(digest, gcry_md_read(handle, GCRY_MD_MD4), 16);
+    gcry_md_close(handle);
+
+    
+    for (int n = 0; n < 16; ++n) {
+        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
+    }
+    out[41] = '\0'; 
+
+    VALUE result = rb_str_new2(out); 
+    return result;
+}
 
 VALUE md5_hexdigest(VALUE self, VALUE full) {
     char *str = RSTRING_PTR(full);
@@ -429,6 +493,12 @@ VALUE streebog_512_hexdigest(VALUE self, VALUE input) {
 void init_cobreak_gcrypt(){
     //Define module GCrypt in mCoBreak
     mCoBreakGCrypt = rb_define_module_under(mCoBreak, "GCrypt");
+    //Define Class MD2 encrypt mode
+    cCoBreakGCryptmd2 = rb_define_class_under(mCoBreakGCrypt, "MD2", rb_cObject);
+    rb_define_singleton_method(cCoBreakGCryptmd2, "hexdigest", md2_hexdigest, 1);
+    //Define Class MD4 encrypt mode
+    cCoBreakGCryptmd4 = rb_define_class_under(mCoBreakGCrypt, "MD4", rb_cObject);
+    rb_define_singleton_method(cCoBreakGCryptmd4, "hexdigest", md4_hexdigest, 1);
     //Define Class MD5 encrypt mode
     cCoBreakGCryptmd5 = rb_define_class_under(mCoBreakGCrypt, "MD5", rb_cObject);
     rb_define_singleton_method(cCoBreakGCryptmd5, "hexdigest", md5_hexdigest, 1);

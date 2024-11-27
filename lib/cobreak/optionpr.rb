@@ -68,6 +68,8 @@ module CoBreak
       end
       CoBreak::Box.var(options)
       case options.bruteforce
+        when ('0')
+          options.bruteforce = 'md2'
         when ('1')
           options.bruteforce = 'md4'
         when ('2')

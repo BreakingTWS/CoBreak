@@ -11,6 +11,9 @@ class Encrypt
     encrypt.mode = mode.downcase
     encrypt.dato = dato
     case encrypt.mode
+      when ('md2')
+        encrypt.crypt = CoBreak::OpenSSL::MD2.hexdigest(dato)
+        out_db = 'MD2'
       when ('md4')
         encrypt.crypt = CoBreak::OpenSSL::MD4.hexdigest(dato)
         out_db = 'MD4'

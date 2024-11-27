@@ -5,8 +5,6 @@
 #define NUM_ROUNDS 12
 
 VALUE mCoBreakOpenSSL;
-VALUE cCoBreakOpenSSLmd4;
-VALUE cCoBreakOpenSSLmd5;
 VALUE cCoBreakOpenSSLhalf_md5;
 VALUE cCoBreakOpenSSLsha1;
 VALUE cCoBreakOpenSSLsha2_224;
@@ -69,27 +67,7 @@ VALUE md4_hexdigest(VALUE self, VALUE input) {
     VALUE result = rb_str_new2(out); // Crear una nueva cadena Ruby
     return result;
 }
-/*
-VALUE md5_hexdigest(VALUE self, VALUE input) {
-    // Convertir el valor Ruby a una cadena C
-    char *str = RSTRING_PTR(input);
-    int length = RSTRING_LEN(input); // Obtener la longitud de la cadena
-    unsigned char digest[MD5_DIGEST_LENGTH]; // MD5 produce un hash de 16 bytes
-    char out[33]; // 16 bytes * 2 para hexadecimal + 1 para el terminador
 
-    // Calcular el hash MD5
-    MD5((unsigned char*)str, length, digest);
-
-    // Convertir el hash a una cadena hexadecimal
-    for (int n = 0; n < MD5_DIGEST_LENGTH; ++n) {
-        sprintf(&(out[n * 2]), "%02x", (unsigned int)digest[n]);
-    }
-    out[32] = '\0'; // Terminar la cadena
-
-    VALUE result = rb_str_new2(out); // Crear una nueva cadena Ruby
-    return result;
-}
-*/
 VALUE half_md5_hexdigest(VALUE self, VALUE input) {
     // Convertir el valor Ruby a una cadena C
     char *str = RSTRING_PTR(input);
@@ -399,9 +377,6 @@ void init_cobreak_openssl(){
                 //Define Class MD4 encrypt mode
                 cCoBreakOpenSSLmd4 = rb_define_class_under(mCoBreakOpenSSL, "MD4", rb_cObject);
                 rb_define_singleton_method(cCoBreakOpenSSLmd4, "hexdigest", md4_hexdigest, 1);
-                //Define Class MD5 encrypt mode
-                //cCoBreakOpenSSLmd5 = rb_define_class_under(mCoBreakOpenSSL, "MD5", rb_cObject);
-                //rb_define_singleton_method(cCoBreakOpenSSLmd5, "hexdigest", md5_hexdigest, 1);
                 //Define Class MD5 encrypt mode
                 cCoBreakOpenSSLhalf_md5 = rb_define_class_under(mCoBreakOpenSSL, "HALF_MD5", rb_cObject);
                 rb_define_singleton_method(cCoBreakOpenSSLhalf_md5, "hexdigest", half_md5_hexdigest, 1);
