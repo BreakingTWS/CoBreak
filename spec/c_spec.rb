@@ -1,4 +1,4 @@
-require_relative '../cobreak/cobreak' # Asegúrate de requerir tu archivo principal
+require "cobreak/cobreak" # Asegúrate de requerir tu archivo principal
 require 'rspec'
 
 RSpec.describe CoBreak do
