@@ -36,11 +36,11 @@ VALUE cesar_attack(VALUE self, VALUE str, VALUE shift) {
 
 int cobreak_attack_cipherw(){
     //Define module Cipher in mCoBreak
-    mCoBreakAttackCipher = rb_define_module_under(mCoBreak, 'CipherAttack');
+    mCoBreakAttackCipher = rb_define_module_under(mCoBreak, "CipherAttack");
 
     //Define class Cesar attack
-    cCoBreakAttackCipherCesar = rb_define_class_under(mCoBreakAttackCipher, 'Cesar', rb_rObject);
+    cCoBreakAttackCipherCesar = rb_define_class_under(mCoBreakAttackCipher, "Cesar", rb_rObject);
 
     //Define method for class Cesar
-    rb_define_singleton_method(cCoBreakAttackCipherCesar, 'crack', cesar_attack, 2);
+    rb_define_singleton_method(cCoBreakAttackCipherCesar, "crack", cesar_attack, 2);
 }
