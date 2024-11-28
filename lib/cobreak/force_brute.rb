@@ -53,7 +53,7 @@ module CoBreak
           end
         else
           if (@hash.include?(@options.typeforce.upcase.to_s))
-            ForzeBrute::word(@options.algo.to_s, @options.wordlist, @options.bruteforce.to_s, @options.out, @options.verbose)
+            ForzeBrute::word(@options.algo.to_s, @options.wordlist, @options.typeforce.to_s, @options.out, @options.verbose)
           end
         end
       end
