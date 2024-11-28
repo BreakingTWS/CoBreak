@@ -29,7 +29,7 @@ module CoBreak
         param.on('-w', '--wordlist=WORDLIST', 'Wordlist mode, read words from FILE or stadin (default: rockyou)'){|wordlist| options.wordlist = wordlist}
         param.on('--show=[FORMAT]', String, 'show decrypted specific hash'){|de_en| options.decrypt = de_en}
         param.on('-i', '--input FILE or TEXT', String, 'take file or text to carry out the process'){|alg| options.algo = alg}
-        param.on('-o', '--output FILe', String, 'output the software'){|out| options.out = out}
+        param.on('-o', '--output FiLe', String, 'output the software'){|out| options.out = out}
         param.on('-v', '--verbose', 'verbose mode'){options.verbose = true}
         param.on('--usage', 'show examples of use of this tool')do
           puts "usage: cobreak [--mode] [--options] [--input] text or file"

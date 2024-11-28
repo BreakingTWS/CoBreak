@@ -49,7 +49,7 @@ module CoBreak
                     end
                   else
                     if (@cipher.include?(@options.bruteforce.upcase.to_s))
-                      ForzeBrute::word(@options.algo.to_s, @options.wordlist, @options.bruteforce.to_s, @options.out, @options.verbose)
+                      ForzeBrute::cipher(@options.algo.to_s, @options.wordlist, @options.bruteforce.to_s, @options.out, @options.verbose)
                     end
                   end
                 end

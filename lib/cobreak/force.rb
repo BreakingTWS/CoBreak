@@ -315,7 +315,7 @@ class Forze_brute
     }
 =end
     if(type_cipher.downcase.eql?('Cesar'))
-      puts "Proximamente..."
+      puts CoBreak::CipherAttack::Cesar.crack("mtqf", "rotes.txt")
     end
   end
 end

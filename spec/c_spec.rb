@@ -4,7 +4,7 @@ require 'rspec'
 RSpec.describe CoBreak do
   describe '.some_method' do
     it 'does something expected' do
-      result = CoBreak::CipherAttack::Cesar.crack("hola", "rotes.txt")
+      result = CoBreak::CipherAttack::Cesar.crack("mtqf", "rotes.txt")
       puts result
       puts "Result Correct"
     end
