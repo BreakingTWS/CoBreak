@@ -23,7 +23,7 @@ module CoBreak
         param.on('-t', '--type=digest or cipher', String, 'Select type for BruteForce'){|typeforce|options.typeforce = typeforce}
         param.separator ""
         param.separator "Options:"
-        param.on('-l', '--list=bruteforce, cipher or digest', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
+        param.on('-l', '--list=TYPE', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
         param.on('-r', '--range MIN MAX', Array, "word chars length"){|rang| options.range = rang}
         param.on('-c', '--chars CHARACTERS', String, 'character input to generate word lists'){|chars| options.chars = chars}
         param.on('-w', '--wordlist=WORDLIST', 'Wordlist mode, read words from FILE or stadin (default: rockyou)'){|wordlist| options.wordlist = wordlist}
