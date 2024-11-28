@@ -122,6 +122,6 @@ int init_cobreak_attack_cipher() {
 
     // Define el método para la clase Cesar
 
-    rb_define_singleton_method(cCoBreakAttackCipherCesar, "crack", attackwordlist_cesar, 3);
+    rb_define_singleton_method(cCoBreakAttackCipherCesar, "crack", attackwordlist_cesar, 2);
 
 }
