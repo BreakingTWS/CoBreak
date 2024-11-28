@@ -18,13 +18,12 @@ module CoBreak
         param.separator "Mode Cryptography"
         param.on('--encrypt=[FORMAT]', String, 'encrypt parameter'){|en_en| options.encrypt = en_en}
         param.separator "Mode BruteForce"
-        param.on('--bword', String, 'brute force mode to crack a hash whitch wordlist format'){|modeforce|options.bruteforce = modeforce}
-        param.on('--bchar', String, 'brute force mode to crack a hash whitch char generator format'){|modeforce|options.bruteforce = modeforce}
-        param.on('--bcword', String, 'brute force mode to crack a hash cipher wordlist format'){|modeforce|options.bruteforce = modeforce}
-        param.on('--bcchar', String, 'brute force mode to crack a cipher whitch char generator'){|modeforce|options.bruteforce = modeforce}
+        param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
+        param.separator "Select Mode Brute Force"
+        param.on('-m', '--mode=digest or cipher', String, 'Select type for BruteForce')
         param.separator ""
         param.separator "Options:"
-        param.on('-l', '--list=encoding or encrypt', String, 'list cipher types of hash formats'){|lin| options.list = lin}
+        param.on('-l', '--list=bruteforce, cipher or digest', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
         param.on('-r', '--range MIN MAX', Array, "word chars length"){|rang| options.range = rang}
         param.on('-c', '--chars CHARACTERS', String, 'character input to generate word lists'){|chars| options.chars = chars}
         param.on('-w', '--wordlist=WORDLIST', 'Wordlist mode, read words from FILE or stadin (default: rockyou)'){|wordlist| options.wordlist = wordlist}
@@ -129,24 +128,45 @@ module CoBreak
           options.bruteforce = 'shake-128'
         else
           puts ""
-    end
-      if !(options.enc.nil?) or !(options.dec.nil?)
+      end
+      case options.bruteforcechar
+      when ('1')
+        options.bruteforcechar = 'Cesar'
+      when ('2')
+        options.bruteforcechar = 'Vigenere'
+      end
+
+      unless (options.enc.nil?) or (options.dec.nil?)
         CoBreak::Box::Cipher.coding()
       end
-      if !(options.encrypt.nil?) or !(options.decrypt.nil?)
+      unless (options.encrypt.nil?) or (options.decrypt.nil?)
         CoBreak::Box::Cryptgraphy.crypt()
       end
       CoBreak::List.new(options)
-      unless (options.wordlist.nil?) or (options.wordlist.empty?)
-        bruteforce = CoBreak::BruteForze.new(options)
-        bruteforce.banner_wordlist()
-        bruteforce.wordlist
-      end
-      unless (options.chars.nil?) or (options.chars.empty?)
-        options.range << ARGV[0].to_i
-        brutechars = CoBreak::BruteChars.new(options)
-        brutechars.banner_chars()
-        brutechars.chars()
+      if (options.bruteforce=="hash")
+        unless (options.wordlist.nil?) or (options.wordlist.empty?)
+          bruteforce = CoBreak::BruteForze.new(options)
+          bruteforce.banner_wordlist()
+          bruteforce.wordlist
+        end
+        unless (options.chars.nil?) or (options.chars.empty?)
+          options.range << ARGV[0].to_i
+          brutechars = CoBreak::BruteChars.new(options)
+          brutechars.banner_chars()
+          brutechars.chars()
+        end
+      elsif (options.bruteforce=="cipher")
+        unless (options.wordlist.nil?) or (options.wordlist.empty?)
+          bruteforce = CoBreak::BruteCipher.new(options)
+          bruteforce.banner_cipher()
+          bruteforce.wordlist
+        end
+        unless (options.chars.nil?) or (options.chars.empty?)
+          options.range << ARGV[0].to_i
+          brutechars = CoBreak::BruteChars.new(options)
+          brutechars.banner_chars()
+          brutechars.chars()
+        end
       end
     end
   end

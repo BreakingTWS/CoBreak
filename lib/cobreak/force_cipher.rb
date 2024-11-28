@@ -31,6 +31,29 @@ module CoBreak
             else
                 puts "\e[1;31m╰─[\e[37m Hash Not Found"
             end
+            def wordlist()
+                if (@options.wordlist.nil?) or (@options.wordlist.empty?) or ('-'.include?(@options.wordlist.to_s))
+                  abort "\n"
+                end
+                if (@cipher.include?(@options.bruteforce.to_s.upcase))
+                  if (File.exists?(@options.algo.to_s))
+                    begin
+                      IO.foreach(@options.algo.to_s){|line|
+                        line.chomp!
+                        if (@cipher.include?(@options.bruteforce.to_s.upcase))
+                          ForzeBrute::word(line, @options.wordlist, @options.bruteforce.to_s, @options.out, @options.verbose)
+                        end
+                      }
+                    rescue ArgumentError => e
+                      puts e.message
+                    end
+                  else
+                    if (@cipher.include?(@options.bruteforce.upcase.to_s))
+                      ForzeBrute::word(@options.algo.to_s, @options.wordlist, @options.bruteforce.to_s, @options.out, @options.verbose)
+                    end
+                  end
+                end
+              end
         end
     end
 end

@@ -1,7 +1,7 @@
 require 'cobreak/function_hash'
 require 'cobreak/cobreak'
 class Forze_brute
-  attr_accessor :hash_input, :type_hash, :crypt, :min_chr, :max_chr, :charact, :word, :wordlist, :result, :out, :verbose, :crack
+  attr_accessor :hash_input, :type_hash, :type_cipher, :crypt, :min_chr, :max_chr, :charact, :word, :wordlist, :result, :out, :verbose, :crack
   def initialize(author = 'BreakerTW')
     @author = author
     @result = nil
@@ -290,6 +290,32 @@ class Forze_brute
       puts "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Not Cracking Text: #{forzechars.dato}"
       puts "\e[1;31m[\e[1;37m+\e[1;31m]\e[1;37m Time: #{Time.now - forzechars.time}\e[0m"
       exit
+    end
+  end
+  def cipherword(dato, wordlist, type, out, verbose = true)
+    begin
+      raise Errno::EACCES, "\e[1;31m[\e[1;37m✘\e[1;31m]\e[1;37m root privileges needed" if `whoami`.chomp != "root"
+    rescue  Errno::EACCES => e
+      puts e.message
+      exit
+    end
+
+    forzecharword = OpenStruct.new
+    @cipher_input = dato
+    @type_cipher = type
+    @out = out
+    @verbose = verbose
+    @wordlist = wordlist
+=begin
+    File.foreach(File.join(Gem.path[1], "gems","cobreak-#{CoBreak.version}" , "lib", "cobreak", "config", "database.db"), mode: 'r'){|booleano|
+    forzebrute.booleano = booleano
+    if (booleano.eql?('true'))
+      verify(dato)
+    end
+    }
+=end
+    if(type_cipher.downcase.eql?('Cesar'))
+      puts "Proximamente..."
     end
   end
 end
