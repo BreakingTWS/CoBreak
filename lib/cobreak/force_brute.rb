@@ -39,7 +39,7 @@ module CoBreak
       if (@options.wordlist.nil?) or (@options.wordlist.empty?) or ('-'.include?(@options.wordlist.to_s))
         abort "\n"
       end
-      if (@hash.include?(@options.bruteforce.to_s.upcase))
+      if (@hash.include?(@options.typeforce.to_s.upcase))
         if (File.exists?(@options.algo.to_s))
           begin
             IO.foreach(@options.algo.to_s){|line|
