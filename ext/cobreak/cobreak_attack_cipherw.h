@@ -2,6 +2,6 @@
 #define COBREAK_ATTACK_CIPHERW_RUBY
 
 #include<gcrypt.h>
-int cobreak_attack_cipherw();
+int init_cobreak_attack_cipherw();
 
 #endif

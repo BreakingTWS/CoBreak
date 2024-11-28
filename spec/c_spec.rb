@@ -1,4 +1,4 @@
-require "cobreak/cobreak_attack_cipherw" # Asegúrate de requerir tu archivo principal
+require "cobreak/cobreak" # Asegúrate de requerir tu archivo principal
 require 'rspec'
 
 RSpec.describe CoBreak do

@@ -34,7 +34,7 @@ VALUE cesar_attack(VALUE self, VALUE str, VALUE shift) {
     return rb_str_new2(output);
 }
 
-int cobreak_attack_cipherw(){
+int init_cobreak_attack_cipherw(){
     //Define module Cipher in mCoBreak
     mCoBreakAttackCipher = rb_define_module_under(mCoBreak, "CipherAttack");
 
