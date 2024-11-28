@@ -57,7 +57,7 @@ VALUE attackwordlist_cesar(VALUE self, VALUE text, VALUE dictionary) {
 }
 
 // Inicialización del módulo y la clase
-int init_cobreak_attack_cipherw() 
+int init_cobreak_attack_cipherw(){
     // Define el módulo Cipher en mCoBreak
     mCoBreakAttackCipher = rb_define_module_under(mCoBreak, "CipherAttack");
 
