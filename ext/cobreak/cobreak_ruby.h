@@ -19,6 +19,7 @@ extern VALUE mCoBreak;
 #include<cobreak_openssl.h>
 #include<cobreak_gcrypt.h>
 #include<cobreak_cipher.h>
+#include<cobreak_attack_wordlist.h>
 //#include<cobreak_exception.h>
 //continue...
 #endif
