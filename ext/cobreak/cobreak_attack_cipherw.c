@@ -30,7 +30,7 @@ VALUE cesar_attack(VALUE self, VALUE str, VALUE shift) {
     int shift_value = NUM2INT(shift);
 
    
-    decodeblock_cesar(input, output, shift_value);
+    decodeblock_attack_cesar(input, output, shift_value);
     return rb_str_new2(output);
 }
 
