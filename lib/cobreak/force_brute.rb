@@ -52,7 +52,7 @@ module CoBreak
             puts e.message
           end
         else
-          if (@hash.include?(@options.bruteforce.upcase.to_s))
+          if (@hash.include?(@options.typeforce.upcase.to_s))
             ForzeBrute::word(@options.algo.to_s, @options.wordlist, @options.bruteforce.to_s, @options.out, @options.verbose)
           end
         end
