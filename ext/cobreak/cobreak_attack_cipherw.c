@@ -42,5 +42,5 @@ int cobreak_attack_cipherw(){
     cCoBreakAttackCipherCesar = rb_define_class_under(mCoBreakAttackCipher, 'Cesar', rb_rObject);
 
     //Define method for class Cesar
-    rb_define_singleton_method(cCoBreakAttackCipherCesar, 'crack', cesar_attack, 2)
+    rb_define_singleton_method(cCoBreakAttackCipherCesar, 'crack', cesar_attack, 2);
 }
