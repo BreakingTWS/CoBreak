@@ -20,7 +20,7 @@ module CoBreak
         param.separator "Mode BruteForce"
         param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
         param.separator "Select Mode Brute Force"
-        param.on('-m', '--mode=digest or cipher', String, 'Select type for BruteForce')
+        param.on('-t', '--type=digest or cipher', String, 'Select type for BruteForce'){|typeforce|options.typeforce = typeforce}
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=bruteforce, cipher or digest', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
@@ -129,11 +129,11 @@ module CoBreak
         else
           puts ""
       end
-      case options.bruteforcechar
+      case options.typeforce
       when ('1')
-        options.bruteforcechar = 'Cesar'
+        options.typeforce = 'Cesar'
       when ('2')
-        options.bruteforcechar = 'Vigenere'
+        options.typeforce = 'Vigenere'
       end
 
       unless (options.enc.nil?) or (options.dec.nil?)
@@ -143,7 +143,7 @@ module CoBreak
         CoBreak::Box::Cryptgraphy.crypt()
       end
       CoBreak::List.new(options)
-      if (options.bruteforce=="hash")
+      if (options.bruteforce=="digest")
         unless (options.wordlist.nil?) or (options.wordlist.empty?)
           bruteforce = CoBreak::BruteForze.new(options)
           bruteforce.banner_wordlist()
