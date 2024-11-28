@@ -24,8 +24,8 @@ module CoBreak
       else
         puts "\e[1;31m├─[\e[37m WordList Not Found"
       end
-      if (@hash.include?(@options.bruteforce.to_s.upcase))
-        puts "\e[1;32m├─[\e[37m Type Hash: #{@options.bruteforce.upcase}"
+      if (@hash.include?(@options.typeforce.to_s.upcase))
+        puts "\e[1;32m├─[\e[37m Type Hash: #{@options.typeforce.upcase}"
       else
         puts "\e[1;31m├─[\e[37m Type Hash Not Found"
       end
