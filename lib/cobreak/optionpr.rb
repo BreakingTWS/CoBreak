@@ -13,14 +13,19 @@ module CoBreak
         param.banner = "Usage: cobreak [--mode] [--options] [--input text or file]"
         param.separator ''
         param.separator "Mode Cipher:"
-        param.on('-enc', '--encoding=CIPHER', String, 'encoding input text or file'){|en_co| options.enc = en_co}
-        param.on('-dec', '--decoding=CIPHER', String, 'decoding input text or file'){|de_co| options.dec = de_co}
+        param.on('-e', '--encoding=CIPHER', String, 'encoding input text or file'){|en_co| options.enc = en_co}
+        param.on('-d', '--decoding=CIPHER', String, 'decoding input text or file'){|de_co| options.dec = de_co}
         param.separator "Mode Cryptography"
         param.on('--encrypt=[FORMAT]', String, 'encrypt parameter'){|en_en| options.encrypt = en_en}
         param.separator "Mode BruteForce"
         param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
         param.separator "Select Mode Brute Force"
-        param.on('-t', '--type=digest or cipher', String, 'Select type for BruteForce'){|typeforce|options.typeforce = typeforce}
+        param.on('-t', '--type=digest or cipher', String, 'Select type for Brute Force'){|typeforce|options.typeforce = typeforce}
+        param.on_tail('--mode', "Show mode for Force Brute"){
+          puts "cobreak --bruteforce=digest            For brute force digest"
+          puts ""
+          puts "cobreak --bruteforce=cipher            For brute force cipher key"
+        }
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=TYPE', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
