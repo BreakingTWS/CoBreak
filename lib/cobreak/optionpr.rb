@@ -21,7 +21,7 @@ module CoBreak
         param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
         param.separator "Select Mode Brute Force"
         param.on('-t', '--type=digest or cipher', String, 'Select type for Brute Force'){|typeforce|options.typeforce = typeforce}
-        param.on_tail('--mode', "Show mode for Force Brute"){
+        param.on('--mode', "Show mode for Force Brute"){
           puts "cobreak --bruteforce=digest            For brute force digest"
           puts ""
           puts "cobreak --bruteforce=cipher            For brute force cipher key"
