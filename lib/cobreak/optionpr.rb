@@ -20,7 +20,7 @@ module CoBreak
         param.separator "Mode BruteForce"
         param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
         param.separator "Select Mode Brute Force"
-        param.on('-t', '--type=digest or cipher', String, 'Select type for Brute Force'){|typeforce|options.typeforce = typeforce}
+        param.on('-t', '--type=TYPE', String, 'Select type for Brute Force'){|typeforce|options.typeforce = typeforce}
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=TYPE', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
@@ -36,23 +36,25 @@ module CoBreak
           puts ""
           puts "cipher:"
           puts ""
-          puts "cobreak --encoding=[CIPHER] --input text or file"
-          puts "cobreak --decoding=[CIPHER] --input text or file"
+          puts "cobreak --encoding --type [cipher type] --input [text]"
+          puts "cobreak --decoding --type [cipher type] --input [text]"
           puts ""
           puts "note that the cesar cipher mode has to have a number in front to know the rotations"
-          puts "examples: --encoding=cesar 5 --input hola"
+          puts "examples: --encoding --type cesar 5 --input [text]"
           puts ""
           puts "bruteforce:"
           puts ""
-          puts "cobreak --bruteforce=[ENCRYPT] --wordlist=[WORDLIST] --input text or file"
-          puts "cobreak --bruteforce=[ENCRYPT] --chars [CHARACTERS] --range MIN MAX --input text or file"
+          puts "cobreak --bruteforce [mode] --type [type] --wordlist [wordlist] --input pass|passfile"
+          puts "cobreak --bruteforce [mode] --type [type] --chars [characters] --range MIN MAX --input pass|passfile"
           puts ""
+          puts ""
+          puts "Los modos de fuerza bruta para cobreak son [cipher] and [digest]"
+          puts "Para ver los tipos de algortimos usables en el programa ejecuta:"
+          puts "cobreak --list [cypher]"
+          puts "cobreak --list [digest]"
         end
-        param.on_tail('-V', '--version', 'show version'){puts "CoBreak version #{CoBreak.version}"; exit}
         param.on_tail('-h', '--help', 'command to view help parameters'){puts param; exit}
-        param.on_tail('--help-more', 'command to view more help'){
-          puts "hola"; exit
-        }
+        param.on_tail('-V', '--version', 'show version'){puts "CoBreak version #{CoBreak.version}"; exit}
         param.separator ''
       end.parse!
       rescue OptionParser::MissingArgument => missing
