@@ -13,19 +13,14 @@ module CoBreak
         param.banner = "Usage: cobreak [--mode] [--options] [--input text or file]"
         param.separator ''
         param.separator "Mode Cipher:"
-        param.on('-e', '--encoding=CIPHER', String, 'encoding input text or file'){|en_co| options.enc = en_co}
-        param.on('-d', '--decoding=CIPHER', String, 'decoding input text or file'){|de_co| options.dec = de_co}
+        param.on('-e', '--encoding', String, 'encoding input text or file'){options.enc = en_co = true}
+        param.on('-d', '--decoding', String, 'decoding input text or file'){options.dec = true}
         param.separator "Mode Cryptography"
-        param.on('--encrypt', String, 'encrypt parameter'){options.encrypt = 1}
+        param.on('--encrypt', String, 'encrypt parameter'){options.encrypt = true}
         param.separator "Mode BruteForce"
         param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
         param.separator "Select Mode Brute Force"
         param.on('-t', '--type=digest or cipher', String, 'Select type for Brute Force'){|typeforce|options.typeforce = typeforce}
-        param.on('--mode', "Show mode for Force Brute"){
-          puts "cobreak --bruteforce=digest            For brute force digest"
-          puts ""
-          puts "cobreak --bruteforce=cipher            For brute force cipher key"
-        }
         param.separator ""
         param.separator "Options:"
         param.on('-l', '--list=TYPE', String, 'list modes bruteforce or cipher types of hash formats'){|lin| options.list = lin}
@@ -55,6 +50,7 @@ module CoBreak
         end
         param.on_tail('-V', '--version', 'show version'){puts "CoBreak version #{CoBreak.version}"; exit}
         param.on_tail('-h', '--help', 'command to view help parameters'){puts param; exit}
+        param.on_tail('--help-more', 'command to view more help'){puts "hola";exit}
         param.separator ''
       end.parse!
       rescue OptionParser::MissingArgument => missing
@@ -141,8 +137,7 @@ module CoBreak
         options.typeforce = 'Vigenere'
       end
 
-      if (options.encrypt.eql?(1))
-        puts "hola"
+      if (options.encrypt.eql?(true))
         unless (options.enc.nil?) or (options.dec.nil?)
           CoBreak::Box::Cipher.coding()
         end
