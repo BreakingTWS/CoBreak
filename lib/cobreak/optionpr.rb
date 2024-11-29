@@ -65,6 +65,7 @@ module CoBreak
         elsif missing.to_s.include?("--list")
           puts missing
           puts "cobreak --list type"
+          exit 1
         else
           puts missing.message
         end
