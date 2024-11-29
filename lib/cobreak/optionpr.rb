@@ -57,6 +57,10 @@ module CoBreak
         param.on_tail('-V', '--version', 'show version'){puts "CoBreak version #{CoBreak.version}"; exit}
         param.separator ''
       end.parse!
+      unless (options.list.nil?) or (options.list.empty?)
+        puts "a"
+        abort
+      end
       rescue OptionParser::MissingArgument => missing
         if missing.to_s.include?("--wordlist")
           options.wordlist = File.join(Gem.path[1], 'gems', "cobreak-#{CoBreak.version}", 'diccionario.txt')
@@ -73,10 +77,7 @@ module CoBreak
           end
         end
       end
-      unless (options.list.nil?) or (options.list.empty?)
-        puts "a"
-        exit 1
-      end
+
       CoBreak::Box.var(options)
       case options.bruteforce
         when ('0')
