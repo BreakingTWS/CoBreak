@@ -73,6 +73,10 @@ module CoBreak
           end
         end
       end
+      unless (options.list.nil?) or (options.list.empty?)
+        puts "a"
+        exit 1
+      end
       CoBreak::Box.var(options)
       case options.bruteforce
         when ('0')
