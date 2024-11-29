@@ -16,7 +16,7 @@ module CoBreak
         param.on('-e', '--encoding=CIPHER', String, 'encoding input text or file'){|en_co| options.enc = en_co}
         param.on('-d', '--decoding=CIPHER', String, 'decoding input text or file'){|de_co| options.dec = de_co}
         param.separator "Mode Cryptography"
-        param.on('--encrypt=[FORMAT]', String, 'encrypt parameter'){|en_en| options.encrypt = en_en}
+        param.on('--encrypt', String, 'encrypt parameter'){options.encrypt = 1}
         param.separator "Mode BruteForce"
         param.on('-b', '--bruteforce=MODE', String, 'Select mode for brute force'){|modeforce|options.bruteforce = modeforce}
         param.separator "Select Mode Brute Force"
@@ -141,11 +141,14 @@ module CoBreak
         options.typeforce = 'Vigenere'
       end
 
-      unless (options.enc.nil?) or (options.dec.nil?)
-        CoBreak::Box::Cipher.coding()
-      end
-      unless (options.encrypt.nil?) or (options.decrypt.nil?)
-        CoBreak::Box::Cryptgraphy.crypt()
+      if (options.encrypt.eql?(1))
+        puts "hola"
+        unless (options.enc.nil?) or (options.dec.nil?)
+          CoBreak::Box::Cipher.coding()
+        end
+        unless (options.encrypt.nil?) or (options.decrypt.nil?)
+          CoBreak::Box::Cryptgraphy.crypt()
+        end
       end
       CoBreak::List.new(options)
       if (options.bruteforce=="digest")
