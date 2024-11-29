@@ -63,7 +63,9 @@ module CoBreak
         elsif missing.to_s.include?("--chars")
           options.chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
         elsif missing.to_s.include?("--list")
-          puts "a"
+          puts missing
+          puts "cobreak --list type"
+          abort
         else
           puts missing.message
         end
