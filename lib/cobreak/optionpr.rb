@@ -50,7 +50,9 @@ module CoBreak
         end
         param.on_tail('-V', '--version', 'show version'){puts "CoBreak version #{CoBreak.version}"; exit}
         param.on_tail('-h', '--help', 'command to view help parameters'){puts param; exit}
-        param.on_tail('--help-more', 'command to view more help'){puts "hola";exit}
+        param.on_tail('--help-more', 'command to view more help'){
+          puts "hola"; exit
+        }
         param.separator ''
       end.parse!
       rescue OptionParser::MissingArgument => missing
