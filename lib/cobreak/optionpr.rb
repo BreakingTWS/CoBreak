@@ -13,7 +13,7 @@ module CoBreak
         param.banner = "Usage: cobreak [--mode] [--options] [--input text or file]"
         param.separator ''
         param.separator "Mode Cipher:"
-        param.on('-e', '--encoding', String, 'encoding input text or file'){options.enc = en_co = true}
+        param.on('-e', '--encoding', String, 'encoding input text or file'){options.enc = true}
         param.on('-d', '--decoding', String, 'decoding input text or file'){options.dec = true}
         param.separator "Mode Cryptography"
         param.on('--encrypt', String, 'encrypt parameter'){options.encrypt = true}

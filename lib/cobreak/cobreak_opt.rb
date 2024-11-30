@@ -24,24 +24,24 @@ module CoBreak
         @options.dec = "" if @options.dec.nil? == true
         @options.cipher = %w[Base16 Base32 Base64 Ascii85 Binary Cesar Vigenere]
         @options.force_cipher = %w[Cesar Vigenere]
-        if (@options.cipher.include?(@options.enc.capitalize)) or (@options.cipher.include?(@options.dec.capitalize));
+        if (@options.cipher.include?(@options.typeforce.capitalize))
           if (File.exists?(@options.algo));
             IO.foreach(@options.algo){|line|
               line.chomp!
-              if (@options.cipher.include?(@options.enc.capitalize))
+              if (@options.cipher.include?(@options.typeforce.capitalize))
                 CoBreak::Cifrado.cipher(line.to_s)
-              elsif (@options.cipher.include?(@options.dec.capitalize))
+              elsif (@options.cipher.include?(@options.typeforce.capitalize))
                 CoBreak::Decifrado.cipher(line.to_s)
               else
                 CoBreak::BruteCipher.crack(line.to_s)
               end
             }
           else
-            if (@options.cipher.include?(@options.enc.capitalize))
-              CoBreak::Cifrado::cipher(@options.enc, @options.algo.to_s)
+            if (@options.enc.eql?(true))
+              CoBreak::Cifrado::cipher(@options.typeforce, @options.algo.to_s)
             end
-            if (@options.cipher.include?(@options.dec.capitalize))
-              CoBreak::Decifrado::cipher(@options.dec,@options.algo.to_s)
+            elsif (@options.dec.eql?(true))
+              CoBreak::Decifrado::cipher(@options.typeforce, @options.algo.to_s)
             end
           end
         end
