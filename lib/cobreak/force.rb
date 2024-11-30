@@ -134,10 +134,11 @@ class Forze_brute
       @result = CoBreak::AttackWordlist::STRIBOG_512.crack(hash_input, wordlist)
     end
 
-    if !(result.nil?)
+    unless (result.nil?)
       puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Password Crack: #{result}"
       #puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Number of lines: #{lin}"
       puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Hash Cracking in #{Time.now - forzebrute.time} seconds"
+      puts "a"
       if !(out.nil?)
         File.open(out, mode: 'a'){|out|
           out.puts "=================================================="
