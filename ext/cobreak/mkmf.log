@@ -1,0 +1,90 @@
+have_library: checking for -lcrypto... -------------------- yes
+
+LD_LIBRARY_PATH=.:/usr/lib/x86_64-linux-gnu "x86_64-linux-gnu-gcc -o conftest -I/usr/include/x86_64-linux-gnu/ruby-3.1.0 -I/usr/include/ruby-3.1.0/ruby/backward -I/usr/include/ruby-3.1.0 -I. -Wdate-time -D_FORTIFY_SOURCE=2   -g -O2 -ffile-prefix-map=BUILDDIR=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC conftest.c  -L. -L/usr/lib/x86_64-linux-gnu -L. -Wl,-z,relro -Wl,-z,now -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -lruby-3.1  -lm  -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+LD_LIBRARY_PATH=.:/usr/lib/x86_64-linux-gnu "x86_64-linux-gnu-gcc -o conftest -I/usr/include/x86_64-linux-gnu/ruby-3.1.0 -I/usr/include/ruby-3.1.0/ruby/backward -I/usr/include/ruby-3.1.0 -I. -Wdate-time -D_FORTIFY_SOURCE=2   -g -O2 -ffile-prefix-map=BUILDDIR=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC conftest.c  -L. -L/usr/lib/x86_64-linux-gnu -L. -Wl,-z,relro -Wl,-z,now -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed     -lruby-3.1 -lcrypto  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+
+extconf.h is:
+/* begin */
+1: #ifndef EXTCONF_H
+2: #define EXTCONF_H
+3: #endif
+/* end */
+
+have_library: checking for -lstdc++... -------------------- yes
+
+LD_LIBRARY_PATH=.:/usr/lib/x86_64-linux-gnu "x86_64-linux-gnu-gcc -o conftest -I/usr/include/x86_64-linux-gnu/ruby-3.1.0 -I/usr/include/ruby-3.1.0/ruby/backward -I/usr/include/ruby-3.1.0 -I. -Wdate-time -D_FORTIFY_SOURCE=2   -g -O2 -ffile-prefix-map=BUILDDIR=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC conftest.c  -L. -L/usr/lib/x86_64-linux-gnu -L. -Wl,-z,relro -Wl,-z,now -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed    -lcrypto  -lruby-3.1 -lstdc++ -lcrypto  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for -lgcrypt... -------------------- yes
+
+LD_LIBRARY_PATH=.:/usr/lib/x86_64-linux-gnu "x86_64-linux-gnu-gcc -o conftest -I/usr/include/x86_64-linux-gnu/ruby-3.1.0 -I/usr/include/ruby-3.1.0/ruby/backward -I/usr/include/ruby-3.1.0 -I. -Wdate-time -D_FORTIFY_SOURCE=2   -g -O2 -ffile-prefix-map=BUILDDIR=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC conftest.c  -L. -L/usr/lib/x86_64-linux-gnu -L. -Wl,-z,relro -Wl,-z,now -fstack-protector-strong -rdynamic -Wl,-export-dynamic -Wl,--no-as-needed    -lstdc++ -lcrypto  -lruby-3.1 -lgcrypt -lstdc++ -lcrypto  -lm  -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+

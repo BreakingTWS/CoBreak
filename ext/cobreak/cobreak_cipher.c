@@ -293,7 +293,6 @@ VALUE binary_decode(VALUE self, VALUE full) {
     return rb_str_new2(strb);
 }
 
-// Define Vigenère
 void vigenere_encode_block(const char *input, const char *key, char *output) {
     size_t input_len = strlen(input);
     size_t key_len = strlen(key);
@@ -352,6 +351,17 @@ VALUE vigenere_decode(VALUE self, VALUE str, VALUE key) {
     return rb_str_new2(output);
 }
 
+// SVG Encoding
+VALUE svg_encode(VALUE self, VALUE full) {
+    char *svg_content = RSTRING_PTR(full);
+    VALUE encoded_value = b64_encode(self, full); // Use existing base64 encode
+    return encoded_value;
+}
+
+VALUE svg_decode(VALUE self, VALUE full) {
+    VALUE decoded_value = b64_decode(self, full); // Use existing base64 decode
+    return decoded_value;
+}
 
 void init_cobreak_cipher() {
     //Define module Cipher in mCoBreak
@@ -377,6 +387,10 @@ void init_cobreak_cipher() {
     //Define method for class Base64
     rb_define_singleton_method(cCoBreakBase64, "encode", b64_encode, 1);
     rb_define_singleton_method(cCoBreakBase64, "decode", b64_decode, 1);
+    //Define method for class Base16
+    rb_define_singleton_method(cCoBreakBase16, "svg_encode", svg_encode, 1);
+    rb_define_singleton_method(cCoBreakBase16, "svg_decode", svg_decode, 1);
+
 
     //Define class Cesar in module mCoBreakCipher
     cCoBreakCesar = rb_define_class_under(mCoBreakCipher, "Cesar", rb_cObject);

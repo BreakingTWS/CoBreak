@@ -53,6 +53,9 @@ module CoBreak
           puts "cobreak --list [cypher]"
           puts "cobreak --list [digest]"
         end
+        param.on("-g", "--gui", "Launch graphical user interface") do
+          options.gui = true
+        end
         param.on_tail('-h', '--help', 'command to view help parameters'){puts param; exit}
         param.on_tail('-V', '--version', 'show version'){puts "CoBreak version #{CoBreak.version}"; exit}
         param.separator ''
@@ -77,7 +80,9 @@ module CoBreak
           end
         end
       end
-
+      if options.gui
+        CoBreak::GUI.start
+      end
       CoBreak::Box.var(options)
       case options.bruteforce
         when ('0')

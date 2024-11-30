@@ -4,12 +4,13 @@ Gem::Specification.new do |info|
   info.executables << "cobreak" 
   info.executables << "cbrdb"
   info.description = "The CoBreak script is an cipher and cryptography tool"
-  info.add_development_dependency "bundler", "~> 1.5"
+  info.add_development_dependency "bundler", "~> 2.3"
 #  info.add_development_dependency  "openssl", "~> 2.2.0"
   info.add_development_dependency  "sequel", "~> 5.44.0"
   info.add_development_dependency  "sqlite3", '~> 1.4', '>= 1.4.0'
 #  info.add_runtime_dependency "sequel", '~> 2.0', '>= 2.0.0'
   info.add_runtime_dependency "sqlite3", '~> 1.4', '>= 1.4.0'
+  info.add_runtime_dependency "gtk3", '~> 3.4'
 #  info.add_runtime_dependency "Ascii85", '~> 1.0', '>= 1.0.0'
 #  info.add_runtime_dependency "ruby_figlet", "=> 0"
   info.authors     = ["BreakerTW"]

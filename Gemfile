@@ -1,8 +1,10 @@
-#source 'https://rubygems.org'
-source 'http://127.0.0.1:9292'
-gem "cobreak"
-gem "rspec"
-group :managedate do
-  gem 'sqlite3'
-  gem 'sequel'
+source 'https://rubygems.org'
+
+gemspec
+gem 'ruby_figlet'
+group :development do
+  gem 'rake', '~> 13.0'
+  gem 'rake-compiler', '~> 1.2'
+  gem 'rspec', '~> 3.0'
+  gem 'sqlite3', '~> 1.4'
 end
