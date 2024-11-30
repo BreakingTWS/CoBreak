@@ -39,7 +39,6 @@ module CoBreak
           else
             if (@options.enc.eql?(true))
               CoBreak::Cifrado::cipher(@options.typeforce, @options.algo.to_s)
-            end
             elsif (@options.dec.eql?(true))
               CoBreak::Decifrado::cipher(@options.typeforce, @options.algo.to_s)
             end
