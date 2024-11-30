@@ -54,12 +54,12 @@ module CoBreak
         @options.decrypt = "" if @options.decrypt.nil? == true
         show = OpenStruct.new
         show.crypt = %w[MD4 MD5 HALF-MD5 SHA1 SHA2-224 SHA2-256 SHA2-384 SHA2-512 SHA3-224 SHA3-256 SHA3-384 SHA3-512 RIPEMD-160 TIGER-160 DOUBLE-SHA1 BLAKE2S-128 BLAKE2S-160 BLAKE2B-160 BLAKE2S-224 BLAKE2S-256 BLAKE2B-256 BLAKE2B-384 BLAKE2B-512 WHIRLPOOL STRIBOG-256 STRIBOG-512 SHAKE-128]
-        if (show.crypt.include?(@options.encrypt.upcase)) or (show.crypt.include?(@options.decrypt.upcase));
+        if (show.crypt.include?(@options.typeforce.upcase)) or (show.crypt.include?(@options.typeforce.upcase));
           if (File.exists?(@options.algo));
             IO.foreach(@options.algo){|line|
               line.chomp!
-              EnCrypt::show(@options.encrypt, line) if (show.crypt.include?(@options.encrypt.upcase))
-              DeCrypt::show(@options.decrypt, line) if (show.crypt.include?(@options.decrypt.upcase))
+              EnCrypt::show(@options.typeforce, line) if (show.crypt.include?(@options.typeforce.upcase))
+              DeCrypt::show(@options.typeforce, line) if (show.crypt.include?(@options.typeforce.upcase))
             }
           else
             if (show.crypt.include?(@options.encrypt.upcase))
