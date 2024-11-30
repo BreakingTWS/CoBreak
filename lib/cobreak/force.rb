@@ -138,13 +138,12 @@ class Forze_brute
       puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Password Crack: #{result}"
       #puts "\r\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Number of lines: #{lin}"
       puts "\e[1;32m[\e[1;37m+\e[1;32m]\e[1;37m Hash Cracking in #{Time.now - forzebrute.time} seconds"
-      puts "a"
       if !(out.nil?)
         File.open(out, mode: 'a'){|out|
           out.puts "=================================================="
           out.puts "software: CoBreak #{CoBreak.version}"
           out.puts "Type Hash: #{type_hash}\n"
-          out.puts "#{result.chomp}:#{crypt.hexdigest(result)}"
+          out.puts "#{result.chomp}:#{hash_input}"
           out.puts "=================================================="
         }
       end
