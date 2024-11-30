@@ -12,52 +12,34 @@ class Decrypt
       String :original
       String :hash
     end
-      case decrypt.mode
-        when ('md4')
-          decrypt.crypt = OpenSSL::Digest::MD4.new
-        when ('md5')
-          decrypt.crypt = OpenSSL::Digest::MD5.new
-        when ('sha1')
-          decrypt.crypt = OpenSSL::Digest::SHA1.new
-        when ('sha224')
-          decrypt.crypt = OpenSSL::Digest::SHA224.new
-        when ('sha256')
-          decrypt.crypt = OpenSSL::Digest::SHA256.new
-        when ('sha384')
-          decrypt.crypt = OpenSSL::Digest::SHA384.new
-        when ('sha512')
-          decrypt.crypt = OpenSSL::Digest::SHA512.new
-        when ('ripemd160')
-          decrypt.crypt = OpenSSL::Digest::RIPEMD160.new
-      end
     File.foreach(decrypt.wordlist) {|line|
       line.chomp!
       if(decrypt.mode.downcase=='md4')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::MD4.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::MD4.hexdigest(line)}
       elsif(decrypt.mode.downcase=='md5')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::MD5.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::MD5.hexdigest(line)}
       elsif(decrypt.mode.downcase=='half-md5')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::HALF_MD5.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::HALF_MD5.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha1')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA1.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA1.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha2-224')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA2_224.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA2_224.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha2-256')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA2_256.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA2_256.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha2-384')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA2_384.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA2_384.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha2-512')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA2_512.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA2_512.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha3-224')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA3_224.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA3_224.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha3-256')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA3_256.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA3_256.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha3-384')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA3_384.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA3_384.hexdigest(line)}
       elsif(decrypt.mode.downcase=='sha3-512')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::SHA3_512.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::SHA3_512.hexdigest(line)}
       elsif(decrypt.mode.downcase=='ripemd-160')
-        dbs[:hashes] << {original:line, hash:CoBreak::OpenSSL::RIPEMD_160.hexdigest(line)}
+        dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::RIPEMD_160.hexdigest(line)}
       elsif(decrypt.mode.downcase=='tiger-160')
         dbs[:hashes] << {original:line, hash:CoBreak::GCrypt::TIGER_160.hexdigest(line)}
       elsif(decrypt.mode.downcase=='double-sha1')
