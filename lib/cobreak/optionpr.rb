@@ -153,11 +153,12 @@ module CoBreak
       end
 
       if (options.encrypt.eql?(true))
-        unless (options.enc.nil?) or (options.dec.nil?)
-          CoBreak::Box::Cipher.coding()
-        end
         unless (options.typeforce.nil?) or (options.typeforce.nil?)
           CoBreak::Box::Cryptgraphy.crypt()
+        end
+      elsif (options.enc.eql?(true)) or (options.dec.eql?(true))
+        unless (options.typeforce.nil?) or (options.trypeforce.empty?)
+          CoBreak::Box::Cipher.coding()
         end
       end
       CoBreak::List.new(options)
