@@ -141,7 +141,7 @@ module CoBreak
       end
       unless (options.list.nil?) or (options.list.empty?)
         unless (options.list.eql?("digest")) or (options.list.eql?("cipher"))
-          puts "Fatal error, type for cobreak (digest) or (digest)"
+          puts "Fatal error, type for cobreak (digest) or (cipher)"
           exit 1 
         end
       end
