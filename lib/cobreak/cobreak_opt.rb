@@ -62,11 +62,11 @@ module CoBreak
               DeCrypt::show(@options.typeforce, line) if (show.crypt.include?(@options.typeforce.upcase))
             }
           else
-            if (show.crypt.include?(@options.encrypt.upcase))
-              EnCrypt::show(@options.encrypt, @options.algo)
+            if (show.crypt.include?(@options.typeforce.upcase))
+              EnCrypt::show(@options.typeforce, @options.algo)
             end
-            if (show.crypt.include?(@options.decrypt.upcase))
-              DeCrypt::show(@options.decrypt.upcase, @options.algo)
+            if (show.crypt.include?(@options.typeforce.upcase))
+              DeCrypt::show(@options.typeforce.upcase, @options.algo)
               #DeCrypt::show(@options.decrypt, @options.algo)
             end
           end
