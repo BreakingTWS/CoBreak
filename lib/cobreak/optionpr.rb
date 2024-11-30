@@ -64,7 +64,7 @@ module CoBreak
           options.chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
         elsif missing.to_s.include?("--list")
           puts missing
-          puts "cobreak --list type"
+          puts "cobreak --list [TYPE]"
           exit 1
         else
           puts missing.message
@@ -156,7 +156,7 @@ module CoBreak
         unless (options.enc.nil?) or (options.dec.nil?)
           CoBreak::Box::Cipher.coding()
         end
-        unless (options.encrypt.nil?) or (options.decrypt.nil?)
+        unless (options.typeforce.nil?) or (options.typeforce.nil?)
           CoBreak::Box::Cryptgraphy.crypt()
         end
       end
