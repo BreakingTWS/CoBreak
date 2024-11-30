@@ -139,6 +139,12 @@ module CoBreak
         else
           puts ""
       end
+      unless (options.list.nil?) or (options.list.empty?)
+        unless (options.list.eql?("digest")) or (options.list.eql?("cipher"))
+          puts "Fatal error, type for cobreak (digest) or (digest)"
+          exit 1 
+        end
+      end
       case options.typeforce
       when ('1')
         options.typeforce = 'Cesar'
