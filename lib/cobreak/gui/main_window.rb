@@ -1,4 +1,5 @@
 require 'gtk3'
+require 'base64'
 require 'cobreak/gui/encryption_tab'
 require 'cobreak/gui/attack_tab'
 require 'cobreak/gui/hash_tab'
