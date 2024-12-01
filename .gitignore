@@ -11,6 +11,7 @@
 /test/version_tmp/
 /tmp/
 /lib/cobreak/cobreak.so
+Rakefile
 # Used by dotenv library to load environment variables.
 # .env
 

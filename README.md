@@ -10,6 +10,10 @@ CoBreak is a password security audit and recovery tool available for many operat
 
 ![BreakerBox GitHub Stats](https://github-readme-stats.vercel.app/api?username=BreakingTWS&show_icons=true&theme=midnight-purple)
 
+
+
+
+
 <h1> Installation</h2>
 
 <h3> Cipher</h3>
@@ -48,7 +52,7 @@ CoBreak is a password security audit and recovery tool available for many operat
  - GOST R 34.11-2012 (Streebog) 256-bit, big-endian
  - GOST R 34.11-2012 (Streebog) 512-bit, big-endian
 
-<h1> Setup</h3>
+<h1>Setup</h1>
 ---
 <h2>Execute in your terminal for build ruby gem and installation:</h2>
 
@@ -59,8 +63,29 @@ CoBreak is a password security audit and recovery tool available for many operat
 <h3>And after install ruby gem:</h3>
 
 > $ **sudo gem install ./cobreak-1.0.5.gem**
-
 ---
+
+<h1>Usage:</h1>
+---
+<h2>Help to CoBreak CLI</h2>
+
+> $ **cobreak --help**
+
+![CoBreak Help](img/CoBreak_Help.png)
+
+<h2>Attack Dictionary CLI</h2>
+
+> $ **sudo cobreak --bruteforce=digest --type=md5 --wordlist=dictionary.txt --input 4d186321c1a7f0f354b297e8914ab240**
+
+![CoBreak Help](img/Attack_CLI.png)
+
+<h2>Attack Dictionary GUI</h2>
+
+![CoBreak Help](img/Attack_GUI.png)
+---
+
+<h1></h1>
+
 # Version
 ## CoBreak
 
@@ -69,4 +94,4 @@ CoBreak is a password security audit and recovery tool available for many operat
 # License
 
 This project is licensed under the (GNU GENERAL PUBLIC LICENSE) - see the [LICENSE](LICENSE) file for details
-# CoBreak
+
