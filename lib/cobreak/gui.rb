@@ -21,8 +21,11 @@ module CoBreak
       end
 
       begin
-        puts "Starting CoBreak GUI..."
+        puts "Starting CoBreak #{CoBreak.version} GUI"
+        print "Ctrl + C Terminate Process..."
         app.run
+      rescue Interrupt => a
+        puts "\nAplication Interrupt for Ctrl + C..."
       rescue => e
         puts "Error running application: #{e.message}"
         puts e.backtrace

@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gemspec
 gem 'ruby_figlet'
+gem 'gtk3'
+gem 'sequel'
+
 group :development do
   gem 'rake', '~> 13.0'
   gem 'rake-compiler', '~> 1.2'

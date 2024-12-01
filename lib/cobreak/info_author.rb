@@ -4,13 +4,13 @@ module CoBreak
       return "BreakerTW"
     end
     def self.email()
-      return "breakerhtb@gmail.com"
+      return "brakingtws@gmail.com"
     end
     def self.date()
       return "2020-5-25"
     end
     def self.telegram()
-      return "@BreakerBox"
+      return "@BreakerTW"
     end
     def self.group()
       group = "https://t.me/Black0utx"

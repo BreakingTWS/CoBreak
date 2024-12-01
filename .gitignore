@@ -10,7 +10,7 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
-
+/lib/cobreak/cobreak.so
 # Used by dotenv library to load environment variables.
 # .env
 
