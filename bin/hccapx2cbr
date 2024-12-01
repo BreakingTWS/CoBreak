@@ -1,0 +1,168 @@
+#!/usr/bin/env ruby
+
+=begin
+Process hccapx file into a format suitable for use with CoBreak.
+This is CoBreak's own implementation for handling WPA/WPA2 handshakes.
+
+Author: BreakerTW
+=end
+
+require 'optparse'
+
+class HCCAPX2CoBreak
+  HCCAPX_SIZE = 393
+  SIGNATURE = "HCPX"
+
+  def initialize(options = {})
+    @nc = options[:nc] || 8
+    @mp = options[:mp].nil? ? true : options[:mp]
+    @verbose = options[:verbose]
+  end
+
+  def pack_cobreak(hccapx, message_pair, hccapx_file, ncorr = 0)
+    # Extraer campos del formato hccapx
+    message_pair = hccapx[8].ord
+    essid = hccapx[10, 32]
+    keyver = hccapx[42].ord
+    keymic = hccapx[43, 16]
+    mac_ap = hccapx[59, 6]
+    nonce_ap = hccapx[65, 32]
+    mac_sta = hccapx[97, 6]
+    nonce_sta = hccapx[103, 32]
+    eapol_len = hccapx[135, 2].unpack('S<')[0]
+    eapol = hccapx[137, 256]
+
+    # Determinar versión de WPA
+    keyver_str = case keyver
+                when 1 then "WPA"
+                when 2 then "WPA2"
+                else "WPA3"
+                end
+
+    # Verificar estado
+    ver = (message_pair & 0x80) > 1 ? "verified" : "not verified"
+
+    # Aplicar corrección de nonce si es necesario
+    if ncorr != 0
+      if (message_pair & 0x40) > 1
+        ver += ", fuzz #{ncorr} BE"
+        corr = [nonce_ap[28..31].unpack('N')[0] + ncorr].pack('N')
+        nonce_ap = nonce_ap[0..27] + corr
+      end
+      if (message_pair & 0x20) > 1
+        ver += ", fuzz #{ncorr} LE"
+        corr = [nonce_ap[28..31].unpack('V')[0] + ncorr].pack('V')
+        nonce_ap = nonce_ap[0..27] + corr
+      end
+    end
+
+    # Formato CoBreak:
+    # CB$WPA$VERSION$ESSID$MAC_AP$MAC_STA$NONCE_AP$NONCE_STA$EAPOL$KEYMIC$STATUS
+    [
+      "CB$WPA$",
+      keyver_str,
+      "$",
+      essid.unpack('Z*').first,
+      "$",
+      mac_ap.unpack('H*')[0],
+      "$",
+      mac_sta.unpack('H*')[0],
+      "$",
+      nonce_ap.unpack('H*')[0],
+      "$",
+      nonce_sta.unpack('H*')[0],
+      "$",
+      eapol[0, eapol_len].unpack('H*')[0],
+      "$",
+      keymic.unpack('H*')[0],
+      "$",
+      ver
+    ].join + "\n"
+  end
+
+  def process_file(hccapx_file)
+    raise "File not found: #{hccapx_file}" unless File.exist?(hccapx_file)
+    raise "Invalid file size" unless File.size(hccapx_file) % HCCAPX_SIZE == 0
+
+    File.open(hccapx_file, 'rb') do |file|
+      while hccapx = file.read(HCCAPX_SIZE)
+        next unless hccapx[0..3] == SIGNATURE
+
+        message_pair = hccapx[8].ord
+        message_pair &= 0x8F unless @mp
+
+        # Generar hash base
+        result = pack_cobreak(hccapx, message_pair, hccapx_file)
+        print result
+
+        # Aplicar correcciones de nonce si es necesario
+        unless (message_pair & 0x10) > 1
+          flip = false
+          if (message_pair & 0x60) == 0
+            flip = true
+            message_pair |= 0x20
+          end
+
+          1.upto(@nc) do |i|
+            if flip
+              print pack_cobreak(hccapx, message_pair, hccapx_file, i)
+              print pack_cobreak(hccapx, message_pair, hccapx_file, -i)
+              message_pair ^= 0x60
+            end
+            print pack_cobreak(hccapx, message_pair, hccapx_file, i)
+            print pack_cobreak(hccapx, message_pair, hccapx_file, -i)
+          end
+        end
+      end
+    end
+  end
+end
+
+if __FILE__ == $0
+  options = {
+    nc: 8,
+    mp: true,
+    verbose: false
+  }
+
+  parser = OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options] <hccapx-file>"
+    
+    opts.on("-n", "--nc NUM", Integer, "AP nonce correction (default: 8)") do |n|
+      options[:nc] = n if n >= 0
+    end
+    
+    opts.on("--no-mp", "Disable message_pair detection") do
+      options[:mp] = false
+    end
+    
+    opts.on("-v", "--verbose", "Show verbose output") do
+      options[:verbose] = true
+    end
+    
+    opts.on("-h", "--help", "Show this help message") do
+      puts opts
+      exit
+    end
+  end
+
+  begin
+    parser.parse!
+
+    if ARGV.empty?
+      puts parser
+      exit 1
+    end
+
+    hccapx_file = ARGV[0]
+    converter = HCCAPX2CoBreak.new(options)
+    converter.process_file(hccapx_file)
+
+  rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+    puts parser
+    exit 1
+  rescue => e
+    puts "Error: #{e.message}"
+    exit 1
+  end
+end

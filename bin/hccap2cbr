@@ -1,0 +1,113 @@
+#!/usr/bin/env ruby
+
+=begin
+Process hccap file into a format suitable for use with CoBreak.
+This is CoBreak's own implementation for handling WPA/WPA2 handshakes.
+
+Author: BreakerTW
+=end
+
+require 'optparse'
+
+class HCCAP2CoBreak
+  HCCAP_SIZE = 392  # Tamaño fijo del formato HCCAP
+
+  def initialize(options = {})
+    @verbose = options[:verbose]
+  end
+
+  def pack_cobreak(hccap)
+    # Extraer campos del formato HCCAP
+    essid, mac_ap, mac_sta, nonce_sta, nonce_ap, 
+    eapol, eapol_size, keyver, keymic = hccap.unpack('Z36a6a6a32a32a256I I a16')
+
+    # Determinar versión de WPA
+    keyver_str = case keyver
+                when 1 then "WPA"
+                when 2 then "WPA2"
+                else "WPA3"
+                end
+
+    # Formato CoBreak:
+    # CB$WPA$VERSION$ESSID$MAC_AP$MAC_STA$NONCE_AP$NONCE_STA$EAPOL$KEYMIC$STATUS
+    [
+      "CB$WPA$",
+      keyver_str,
+      "$",
+      essid.to_s.unpack('Z*').first,
+      "$",
+      mac_ap.unpack('H*')[0],
+      "$",
+      mac_sta.unpack('H*')[0],
+      "$",
+      nonce_ap.unpack('H*')[0],
+      "$",
+      nonce_sta.unpack('H*')[0],
+      "$",
+      eapol[0, eapol_size].unpack('H*')[0],
+      "$",
+      keymic.unpack('H*')[0],
+      "$",
+      "not verified"
+    ].join + "\n"
+  end
+
+  def process_file(hccap_file)
+    raise "File not found: #{hccap_file}" unless File.exist?(hccap_file)
+    raise "Invalid file size" unless File.size(hccap_file) % HCCAP_SIZE == 0
+
+    File.open(hccap_file, 'rb') do |file|
+      while hccap = file.read(HCCAP_SIZE)
+        # Verificar que los campos tengan valores válidos
+        essid, mac_ap, mac_sta = hccap.unpack('Z36a6a6')
+        
+        if essid.to_s.strip.empty? || mac_ap.unpack('H*')[0] == '000000000000' || 
+           mac_sta.unpack('H*')[0] == '000000000000'
+          puts "Warning: Skipping invalid HCCAP record" if @verbose
+          next
+        end
+
+        print pack_cobreak(hccap)
+      end
+    end
+  end
+end
+
+if __FILE__ == $0
+  options = {
+    verbose: false
+  }
+
+  parser = OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options] <hccap-file>"
+    
+    opts.on("-v", "--verbose", "Show verbose output") do
+      options[:verbose] = true
+    end
+    
+    opts.on("-h", "--help", "Show this help message") do
+      puts opts
+      exit
+    end
+  end
+
+  begin
+    parser.parse!
+
+    if ARGV.empty?
+      puts parser
+      exit 1
+    end
+
+    hccap_file = ARGV[0]
+    converter = HCCAP2CoBreak.new(options)
+    converter.process_file(hccap_file)
+
+  rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+    puts parser
+    exit 1
+  rescue => e
+    puts "Error: #{e.message}"
+    exit 1
+  end
+end

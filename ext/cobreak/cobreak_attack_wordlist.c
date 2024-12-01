@@ -31,6 +31,40 @@ VALUE cCoBreakAttackWordlistStribog512;
 #define BLOCK_SIZE 1024
 #define MAX_HASH_LENGTH_MD 16
 #define MAX_LINE_LENGTH 256
+#define MAX_STATS_SIZE 1024
+
+typedef struct {
+    int char_value;
+    float probability;
+} CharProb;
+
+typedef struct {
+    CharProb *probs;
+    int size;
+} StatsData;
+
+StatsData* load_stats_file(const char *stats_file) {
+    FILE *f = fopen(stats_file, "r");
+    if (!f) return NULL;
+    
+    StatsData *stats = malloc(sizeof(StatsData));
+    stats->probs = malloc(MAX_STATS_SIZE * sizeof(CharProb));
+    stats->size = 0;
+    
+    char line[256];
+    while (fgets(line, sizeof(line), f)) {
+        if (strncmp(line, "1=proba1[", 9) == 0) {
+            int char_val;
+            sscanf(line, "1=proba1[%d]", &char_val);
+            stats->probs[stats->size].char_value = char_val;
+            stats->probs[stats->size].probability = 1.0;
+            stats->size++;
+        }
+    }
+    
+    fclose(f);
+    return stats;
+}
 
 //Define MD4 Crack
 void calcular_hash_md4(const char *cadena, unsigned char *hash) {
@@ -176,6 +210,74 @@ VALUE attackwordlist_md5(VALUE self, VALUE hash, VALUE dictionary) {
     
     return found_password;
 }
+
+/*
+VALUE attackwordlist_md5(VALUE self, VALUE hash, VALUE dictionary, VALUE stats_file) {
+    // ... código existente ...
+    
+    // Cargar estadísticas si se proporcionan
+    StatsData *stats = NULL;
+    if (stats_file != Qnil) {
+        stats = load_stats_file(StringValueCStr(stats_file));
+    }
+    
+    // Modificar el bucle de lectura para usar las estadísticas
+    while (1) {
+        size_t count = 0;
+        
+        // Leer líneas del diccionario
+        for (size_t i = 0; i < BLOCK_SIZE && fgets(lineas[count], MAX_LINE_LENGTH, archivo); i++) {
+            lineas[count][strcspn(lineas[count], "\r\n")] = 0;
+            count++;
+        }
+        
+        if (count == 0) break;
+        
+        // Ordenar las líneas según las estadísticas si están disponibles
+        if (stats) {
+            // Ordenar lineas[] basado en stats->probs
+            for (size_t i = 0; i < count; i++) {
+                for (size_t j = i + 1; j < count; j++) {
+                    float prob_i = 0, prob_j = 0;
+                    
+                    // Calcular probabilidad para cada línea
+                    for (int k = 0; k < stats->size; k++) {
+                        if (strchr(lineas[i], stats->probs[k].char_value))
+                            prob_i += stats->probs[k].probability;
+                        if (strchr(lineas[j], stats->probs[k].char_value))
+                            prob_j += stats->probs[k].probability;
+                    }
+                    
+                    // Intercambiar si es necesario
+                    if (prob_j > prob_i) {
+                        char *temp = lineas[i];
+                        lineas[i] = lineas[j];
+                        lineas[j] = temp;
+                    }
+                }
+            }
+        }
+        
+        // Resto del código existente...
+    }
+    
+    // Liberar memoria de las estadísticas
+    if (stats) {
+        free(stats->probs);
+        free(stats);
+    }
+    
+    // ... resto del código existente ...
+}
+*/
+
+
+
+
+
+
+
+
 
 //Define Half MD5 Crack
 int comparar_hashes_half_md5(const unsigned char *hash1, const unsigned char *hash2) {

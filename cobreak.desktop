@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CoBreak
+GenericName=Password Cracker
+Comment=Password cracking and security audit tool
+Exec=cobreak
+Icon=/usr/share/cobreak/img/Breaker.jpg
+Terminal=true
+Categories=System;Security;X-Pentesting;
+Keywords=password;crack;hash;wifi;gpg;zip;
+StartupNotify=true

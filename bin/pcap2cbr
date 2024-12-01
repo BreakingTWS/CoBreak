@@ -1,0 +1,286 @@
+#!/usr/bin/env ruby
+
+=begin
+Process PCAP files containing WPA/WPA2 handshakes into a format suitable for use with CoBreak.
+This is CoBreak's own implementation for handling PCAP files with WiFi handshakes.
+
+Author: BreakerTW
+=end
+
+require 'optparse'
+
+class PCAP2CoBreak
+  PCAP_MAGIC = "\xd4\xc3\xb2\xa1" # Magic number para PCAP
+  PCAP_MAGIC_SWAPPED = "\xa1\xb2\xc3\xd4" # Magic number para PCAP con endian invertido
+  PCAP_NG_MAGIC = "\x0a\x0d\x0d\x0a" # Magic number para PCAP-NG
+
+  # Constantes para IEEE 802.11
+  IEEE80211_BEACON = 0x80
+  IEEE80211_DATA = 0x08
+  IEEE80211_QOS_DATA = 0x88
+  IEEE80211_AUTH = 0xB0
+  IEEE80211_DEAUTH = 0xC0
+  IEEE80211_ASSOC_REQ = 0x00
+  IEEE80211_ASSOC_RESP = 0x10
+  IEEE80211_REASSOC_REQ = 0x20
+  IEEE80211_REASSOC_RESP = 0x30
+  IEEE80211_PROBE_REQ = 0x40
+  IEEE80211_PROBE_RESP = 0x50
+  IEEE80211_DISASSOC = 0xA0
+  
+  # Constantes para EAPOL
+  EAPOL_KEY = 0x03
+  WPA_KEY_INFO_TYPE_MASK = 0x0007
+  WPA_KEY_INFO_TYPE_HMAC_MD5_RC4 = 0x0001
+  WPA_KEY_INFO_TYPE_HMAC_SHA1_AES = 0x0002
+  WPA_KEY_INFO_TYPE_AES_128_CMAC = 0x0003
+
+  def initialize(options = {})
+    @verbose = options[:verbose]
+    @debug = options[:debug]
+    @handshakes = {}
+  end
+
+  def read_pcap_header(file)
+    magic = file.read(4)
+    
+    case magic
+    when PCAP_MAGIC
+      @swapped = false
+    when PCAP_MAGIC_SWAPPED
+      @swapped = true
+    when PCAP_NG_MAGIC
+      raise "PCAP-NG format not supported yet"
+    else
+      raise "Not a valid PCAP file"
+    end
+
+    # Leer resto del header
+    version_major, version_minor = @swapped ? 
+      file.read(4).unpack('n2') : file.read(4).unpack('v2')
+    thiszone = @swapped ? file.read(4).unpack('N')[0] : file.read(4).unpack('V')[0]
+    sigfigs = @swapped ? file.read(4).unpack('N')[0] : file.read(4).unpack('V')[0]
+    snaplen = @swapped ? file.read(4).unpack('N')[0] : file.read(4).unpack('V')[0]
+    network = @swapped ? file.read(4).unpack('N')[0] : file.read(4).unpack('V')[0]
+
+    {
+      version: [version_major, version_minor],
+      thiszone: thiszone,
+      sigfigs: sigfigs,
+      snaplen: snaplen,
+      network: network
+    }
+  end
+
+  def read_packet(file)
+    # Leer header del paquete
+    begin
+      ts_sec, ts_usec, incl_len, orig_len = @swapped ? 
+        file.read(16).unpack('N4') : file.read(16).unpack('V4')
+    rescue
+      return nil
+    end
+
+    # Leer datos del paquete
+    packet_data = file.read(incl_len)
+    return nil unless packet_data && packet_data.length == incl_len
+
+    {
+      ts_sec: ts_sec,
+      ts_usec: ts_usec,
+      incl_len: incl_len,
+      orig_len: orig_len,
+      data: packet_data
+    }
+  end
+
+  def parse_ieee80211_header(data)
+    frame_control = data[0,2].unpack('v')[0]
+    duration = data[2,2].unpack('v')[0]
+    addr1 = data[4,6]
+    addr2 = data[10,6]
+    addr3 = data[16,6]
+    seq_ctrl = data[22,2].unpack('v')[0]
+
+    {
+      frame_control: frame_control,
+      duration: duration,
+      addr1: addr1,
+      addr2: addr2,
+      addr3: addr3,
+      seq_ctrl: seq_ctrl,
+      type: (frame_control >> 2) & 0x3f,
+      subtype: (frame_control >> 4) & 0xf
+    }
+  end
+
+  def parse_eapol(data, header)
+    return nil unless data.length >= 4
+
+    version = data[0].ord
+    type = data[1].ord
+    length = data[2,2].unpack('n')[0]
+    
+    return nil unless type == EAPOL_KEY && data.length >= 99
+
+    key_info = data[5,2].unpack('n')[0]
+    key_length = data[7,2].unpack('n')[0]
+    replay_counter = data[9,8]
+    nonce = data[17,32]
+    key_iv = data[49,16]
+    rsc = data[65,8]
+    id = data[73,8]
+    mic = data[81,16]
+    key_data_length = data[97,2].unpack('n')[0]
+
+    {
+      version: version,
+      type: type,
+      length: length,
+      key_info: key_info,
+      key_length: key_length,
+      replay_counter: replay_counter,
+      nonce: nonce,
+      key_iv: key_iv,
+      rsc: rsc,
+      id: id,
+      mic: mic,
+      key_data_length: key_data_length,
+      key_data: data[99, key_data_length]
+    }
+  end
+
+  def process_handshake(header, eapol)
+    # Identificar el handshake por BSSID y cliente
+    key = "#{header[:addr3].unpack('H*')[0]}_#{header[:addr2].unpack('H*')[0]}"
+    
+    @handshakes[key] ||= {
+      bssid: header[:addr3],
+      client: header[:addr2],
+      essid: nil,
+      anonce: nil,
+      snonce: nil,
+      key_mic: nil,
+      eapol_data: nil
+    }
+
+    # Actualizar información del handshake
+    if (eapol[:key_info] & 0x08) == 0 # Message 1 o 3
+      @handshakes[key][:anonce] = eapol[:nonce]
+    else # Message 2 o 4
+      @handshakes[key][:snonce] = eapol[:nonce]
+      @handshakes[key][:key_mic] = eapol[:mic]
+      @handshakes[key][:eapol_data] = eapol[:key_data]
+    end
+  end
+
+  def pack_cobreak(handshake)
+    # Formato CoBreak para PCAP:
+    # CB$PCAP$ESSID$BSSID$CLIENT$ANONCE$SNONCE$EAPOL$MIC
+    [
+      "CB$PCAP$",
+      (handshake[:essid] || "unknown").unpack('H*')[0],
+      "$",
+      handshake[:bssid].unpack('H*')[0],
+      "$",
+      handshake[:client].unpack('H*')[0],
+      "$",
+      handshake[:anonce]&.unpack('H*')&.[](0),
+      "$",
+      handshake[:snonce]&.unpack('H*')&.[](0),
+      "$",
+      handshake[:eapol_data]&.unpack('H*')&.[](0),
+      "$",
+      handshake[:key_mic]&.unpack('H*')&.[](0)
+    ].join + "\n"
+  end
+
+  def process_file(pcap_file)
+    raise "File not found: #{pcap_file}" unless File.exist?(pcap_file)
+
+    File.open(pcap_file, 'rb') do |file|
+      # Leer header PCAP
+      pcap_header = read_pcap_header(file)
+      puts "Processing PCAP file..." if @verbose
+
+      # Procesar paquetes
+      while packet = read_packet(file)
+        next unless packet[:data].length > 24 # Mínimo tamaño para header 802.11
+
+        # Parsear header 802.11
+        header = parse_ieee80211_header(packet[:data])
+        
+        # Procesar solo paquetes de datos
+        if [IEEE80211_DATA, IEEE80211_QOS_DATA].include?(header[:type])
+          # Buscar EAPOL
+          data_start = header[:type] == IEEE80211_QOS_DATA ? 26 : 24
+          if packet[:data].length > data_start + 8
+            llc_header = packet[:data][data_start, 8]
+            
+            # Verificar si es EAPOL
+            if llc_header[0,3] == "\xaa\xaa\x03" && llc_header[6,2] == "\x88\x8e"
+              eapol_data = packet[:data][data_start + 8..-1]
+              if eapol = parse_eapol(eapol_data, header)
+                process_handshake(header, eapol)
+              end
+            end
+          end
+        end
+      end
+
+      # Generar salida para handshakes completos
+      @handshakes.each do |key, handshake|
+        if handshake[:anonce] && handshake[:snonce] && 
+           handshake[:key_mic] && handshake[:eapol_data]
+          print pack_cobreak(handshake)
+        end
+      end
+    end
+  rescue => e
+    raise "Error processing PCAP file: #{e.message}"
+  end
+end
+
+if __FILE__ == $0
+  options = {
+    verbose: false,
+    debug: false
+  }
+
+  parser = OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options] <pcap-file>"
+    
+    opts.on("-v", "--verbose", "Show verbose output") do
+      options[:verbose] = true
+    end
+    
+    opts.on("-d", "--debug", "Show debug information") do
+      options[:debug] = true
+    end
+    
+    opts.on("-h", "--help", "Show this help message") do
+      puts opts
+      exit
+    end
+  end
+
+  begin
+    parser.parse!
+
+    if ARGV.empty?
+      puts parser
+      exit 1
+    end
+
+    pcap_file = ARGV[0]
+    converter = PCAP2CoBreak.new(options)
+    converter.process_file(pcap_file)
+
+  rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+    puts parser
+    exit 1
+  rescue => e
+    puts "Error: #{e.message}"
+    exit 1
+  end
+end

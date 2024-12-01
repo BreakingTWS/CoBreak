@@ -1,0 +1,143 @@
+#!/usr/bin/env ruby
+
+=begin
+Process ZIP files into a format suitable for use with CoBreak.
+This is CoBreak's own implementation for handling encrypted ZIP files.
+
+Author: BreakerTW
+=end
+
+require 'optparse'
+require 'zip'
+
+class ZIP2CoBreak
+  def initialize(options = {})
+    @verbose = options[:verbose]
+  end
+
+  def read_zip_header(file)
+    # Leer los primeros bytes para verificar la firma ZIP
+    signature = file.read(4)
+    return nil unless signature == "PK\x03\x04"
+
+    # Leer el encabezado local del archivo
+    version = file.read(2).unpack('v')[0]
+    flags = file.read(2).unpack('v')[0]
+    compression = file.read(2).unpack('v')[0]
+    mod_time = file.read(2).unpack('v')[0]
+    mod_date = file.read(2).unpack('v')[0]
+    crc = file.read(4).unpack('V')[0]
+    compressed_size = file.read(4).unpack('V')[0]
+    uncompressed_size = file.read(4).unpack('V')[0]
+    name_length = file.read(2).unpack('v')[0]
+    extra_length = file.read(2).unpack('v')[0]
+    
+    # Leer nombre del archivo
+    filename = file.read(name_length)
+    
+    # Leer campo extra si existe
+    extra = extra_length > 0 ? file.read(extra_length) : ""
+    
+    # Leer datos de encriptación si el archivo está encriptado
+    if (flags & 0x1) != 0  # Si el bit de encriptación está activado
+      encryption_header = file.read(12)  # Encabezado de encriptación ZIP
+    end
+
+    {
+      version: version,
+      flags: flags,
+      compression: compression,
+      mod_time: mod_time,
+      mod_date: mod_date,
+      crc: crc,
+      compressed_size: compressed_size,
+      uncompressed_size: uncompressed_size,
+      filename: filename,
+      encryption_header: encryption_header
+    }
+  end
+
+  def pack_cobreak(zip_info)
+    # Formato CoBreak para ZIP:
+    # CB$ZIP$filename$mod_date$mod_time$crc$comp_size$uncomp_size$enc_header
+    [
+      "CB$ZIP$",
+      zip_info[:filename],
+      "$",
+      zip_info[:mod_date].to_s(16).rjust(4, '0'),
+      "$",
+      zip_info[:mod_time].to_s(16).rjust(4, '0'),
+      "$",
+      zip_info[:crc].to_s(16).rjust(8, '0'),
+      "$",
+      zip_info[:compressed_size].to_s,
+      "$",
+      zip_info[:uncompressed_size].to_s,
+      "$",
+      zip_info[:encryption_header]&.unpack('H*')&.first || ''
+    ].join + "\n"
+  end
+
+  def process_file(zip_file)
+    raise "File not found: #{zip_file}" unless File.exist?(zip_file)
+    
+    File.open(zip_file, 'rb') do |file|
+      while !file.eof?
+        if info = read_zip_header(file)
+          if (info[:flags] & 0x1) != 0  # Si el archivo está encriptado
+            print pack_cobreak(info)
+          else
+            puts "Warning: Skipping unencrypted file: #{info[:filename]}" if @verbose
+          end
+          
+          # Saltar al siguiente archivo en el ZIP
+          file.seek(info[:compressed_size], IO::SEEK_CUR)
+        else
+          # Si no encontramos una firma válida, intentamos avanzar byte por byte
+          file.seek(1, IO::SEEK_CUR)
+        end
+      end
+    end
+  rescue => e
+    raise "Error processing ZIP file: #{e.message}"
+  end
+end
+
+if __FILE__ == $0
+  options = {
+    verbose: false
+  }
+
+  parser = OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options] <zip-file>"
+    
+    opts.on("-v", "--verbose", "Show verbose output") do
+      options[:verbose] = true
+    end
+    
+    opts.on("-h", "--help", "Show this help message") do
+      puts opts
+      exit
+    end
+  end
+
+  begin
+    parser.parse!
+
+    if ARGV.empty?
+      puts parser
+      exit 1
+    end
+
+    zip_file = ARGV[0]
+    converter = ZIP2CoBreak.new(options)
+    converter.process_file(zip_file)
+
+  rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+    puts parser
+    exit 1
+  rescue => e
+    puts "Error: #{e.message}"
+    exit 1
+  end
+end
