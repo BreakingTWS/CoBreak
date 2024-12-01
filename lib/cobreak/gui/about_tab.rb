@@ -33,7 +33,7 @@ module CoBreak
         profile_box.halign = :center
 
         # Profile image
-        if pixbuf = Assets.load_image_file(File.join(Dir.pwd, "img/Breaker.jpg"))
+        if pixbuf = Assets.load_image_file(File.join(Gem.path[1], "gems", "cobreak-#{CoBreak.version}", "img", "Breaker.jpg")
           # Create a square image
           size = [pixbuf.width, pixbuf.height].min
           x_offset = (pixbuf.width - size) / 2
