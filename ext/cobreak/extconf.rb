@@ -15,9 +15,13 @@ if (`gem search sqlite3 --installed` == "true\n")
 #      have_header("window.h")
 #    end
     create_header
-    have_library( 'stdc++' );
+    have_library('stdc++');
     have_library('gcrypt');
-    $CFLAGS << " -Wall"
+    have_header("ruby.h")
+    have_header("openssl/hmac.h")
+    have_header("openssl/evp.h")
+    $CFLAGS << " -Wall -O3"
+
     create_makefile("cobreak/cobreak")
  # else
  #   abort("missing header's of CoBreak")
